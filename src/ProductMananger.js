@@ -10,19 +10,19 @@ class ProductMananger {
   code;
   stock;
 
-  constructor(path) {
-    this.path = path;
+  constructor (){
+    this.path = file;
     this.products = this.getProducts();
   }
 
-  getProducts() {
+  getProducts = async () => {
     if (fs.existsSync(file)) {
-      const content = fs.readFileSync(file, "utf-8");
+      const content = await fs.promises.readFile(file, "utf-8");
       return JSON.parse(content);
     } else {
       return [];
     }
-  }
+  };
 
   saveProducts = async () => {
     try {
@@ -63,8 +63,8 @@ class ProductMananger {
     }
   };
 
-  getProductsById = (id) => {
-    this.products = this.getProducts();
+  getProductById = async (id) => {
+    this.products = await this.getProducts();
     const found = this.products.find((p) => p.id === id);
     if (found === undefined) {
       console.log(`El ID "${id}" no se encuentra en la DB`);
