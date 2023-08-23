@@ -1,5 +1,5 @@
-const express = require("express");
-const ProductMananger = require("./ProductMananger.json");
+import express from "express";
+import ProductMananger from "./ProductMananger.js";
 const productsMananger = new ProductMananger();
 
 const app = express();
@@ -8,14 +8,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/products", async (req, res) => {
-  const limit = req.query.limit;
-  const products = await productsMananger.getProducts();
+  try {
+    const limit = req.query.limit;
+    const products = await productsMananger.getProducts();
 
-  if (limit) {
-    return res.send(autos.slice(0, limit));
+    if (limit) {
+      return res.send(products.slice(0, limit));
+    }
+
+    res.send(products);
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res.status(500).send("An error occurred while fetching products.");
   }
-
-  res.send(products);
 });
 
 app.get("/products/:pId", async (req, res) => {
@@ -25,4 +30,4 @@ app.get("/products/:pId", async (req, res) => {
   res.send(product);
 });
 
-app.listen(8080,()=>console.log("ok"));
+app.listen(8080, () => console.log("ok"));

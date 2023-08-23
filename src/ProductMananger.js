@@ -1,5 +1,5 @@
-const fs = require("fs");
-const file = "./Products.js";
+import fs from "fs";
+const file = "./products.json";
 
 class ProductMananger {
   static id = 0;
@@ -10,14 +10,18 @@ class ProductMananger {
   code;
   stock;
 
-  constructor (){
+  constructor() {
     this.path = file;
-    this.products = this.getProducts();
+    this.initialize();
   }
 
+  initialize = async () => {
+    this.products = await this.getProducts();
+  };
+
   getProducts = async () => {
-    if (fs.existsSync(file)) {
-      const content = await fs.promises.readFile(file, "utf-8");
+    if (fs.existsSync(this.path)) {
+      const content = await fs.promises.readFile(this.path, "utf-8");
       return JSON.parse(content);
     } else {
       return [];
@@ -64,8 +68,8 @@ class ProductMananger {
   };
 
   getProductById = async (id) => {
-    this.products = await this.getProducts();
-    const found = this.products.find((p) => p.id === id);
+    const products = await this.getProducts();
+    const found = products.find((p) => p.id === id);
     if (found === undefined) {
       console.log(`El ID "${id}" no se encuentra en la DB`);
       return undefined;
@@ -101,7 +105,7 @@ class ProductMananger {
   };
 
   deleteProduct = async (id) => {
-    const productToDelete = this.getProductsById(id);
+    const productToDelete = await this.getProductsById(id);
     if (!productToDelete) {
       console.log(
         `El producto con ID "${id}" no se encuentra en la DB, por lo tanto no se puede borrar`
@@ -113,4 +117,4 @@ class ProductMananger {
   };
 }
 
-module.export = ProductMananger;
+export default ProductMananger;
