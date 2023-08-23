@@ -1,5 +1,5 @@
 import fs from "fs";
-const file = "./products.json";
+const file = "./src/products.json";
 
 class ProductMananger {
   static id = 0;
@@ -87,7 +87,7 @@ class ProductMananger {
     stock
   ) => {
     try {
-      const productToUpdate = await this.getProductsById(id);
+      const productToUpdate = await this.getProductById(id);
       if (!productToUpdate) {
         console.log(`El ID "${id}" no se encuentra en la DB`);
         return;
@@ -105,7 +105,7 @@ class ProductMananger {
   };
 
   deleteProduct = async (id) => {
-    const productToDelete = await this.getProductsById(id);
+    const productToDelete = await this.getProductById(id);
     if (!productToDelete) {
       console.log(
         `El producto con ID "${id}" no se encuentra en la DB, por lo tanto no se puede borrar`

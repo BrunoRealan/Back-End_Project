@@ -15,7 +15,6 @@ app.get("/products", async (req, res) => {
     if (limit) {
       return res.send(products.slice(0, limit));
     }
-
     res.send(products);
   } catch (error) {
     console.error("Error fetching products:", error);
