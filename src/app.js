@@ -29,4 +29,9 @@ app.get("/products/:pId", async (req, res) => {
   res.send(product);
 });
 
+app.post("/", async (req, res) => {
+  const newProduct = await productsMananger.addProduct(req.body.title,req.body.description,req.body.price,req.body.thumbnail,req.body.code,req.body.stock);
+  res.send(newProduct)
+});
+
 app.listen(8080, () => console.log("ok"));

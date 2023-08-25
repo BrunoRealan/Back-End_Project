@@ -44,15 +44,23 @@ class ProductMananger {
       }
       if (
         this.products.some(
-          (p) => p.code === code || p.id === ProductMananger.id
+          (p) => p.code === code
         )
       ) {
-        console.log("Ya existe un producto con este código o ID.");
+        console.log("Ya existe un producto con este código");
+        return;
+      }
+      if (
+        this.products.some(
+          ({id}) => id === ProductMananger.id
+        )
+      ) {
+        console.log("Ya existe un producto con este ID.");
         return;
       }
 
       const product = {
-        id: ProductMananger.id++,
+        id: ProductMananger.id,
         title,
         description,
         price,
@@ -61,6 +69,7 @@ class ProductMananger {
         stock,
       };
       this.products.push(product);
+      ProductMananger.id++;
       await this.saveProducts();
     } catch (error) {
       console.log(error);
