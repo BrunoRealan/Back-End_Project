@@ -17,6 +17,7 @@ class ProductManager {
     this.carts = await this.getCarts();
   }
 
+  //Métodos de los Productos
   async getProducts() {
     try {
       if (fs.existsSync(this.productsPath)) {
@@ -61,6 +62,7 @@ class ProductManager {
       !stock ||
       !category
     ) {
+      console.log("Falta algun campo");
       return false;
     }
     if (
@@ -73,6 +75,7 @@ class ProductManager {
       typeof category !== "string" ||
       !Array.isArray(thumbnail)
     ) {
+      console.log("Asegurate que los campos tienen valores válidos");
       return false;
     }
     return true;
@@ -85,9 +88,11 @@ class ProductManager {
         return;
       }
       if (this.products.some((p) => p.code === product.code)) {
+        console.log(`Ya existe un producto de código "${product.code}"`);
         return;
       }
       if (this.products.some((p) => p.id === ProductManager.id)) {
+        console.log(`Ya existe un producto de ID "${ProductManager.id}"`);
         return;
       }
       const newProduct = {
@@ -100,6 +105,7 @@ class ProductManager {
       //NO SE AUTOINCREMENTA ID???
       ProductManager.id++;
       await this.saveProducts();
+      console.log("El producto se agregó correctamente");
     } catch (error) {
       console.log(error);
     }
@@ -110,6 +116,9 @@ class ProductManager {
       const products = await this.getProducts();
       const found = products.find((p) => p.id === id);
       if (!found) {
+        console.log(
+          `No se encontró un producto de ID "${id}" en la lista de productos`
+        );
         return undefined;
       }
       return found;
@@ -162,6 +171,7 @@ class ProductManager {
       if (index !== -1) {
         this.products[index] = productToUpdate;
         await this.saveProducts();
+        console.log("El producto se actualizó correctamente");
       } else {
         console.log(
           `No se encontró el producto con ID "${id}" en la lista de productos`
@@ -183,11 +193,13 @@ class ProductManager {
       );
       this.products.splice(productIndex, 1);
       await this.saveProducts();
+      console.log("El producto se eliminó correctamente");
     } catch (error) {
       console.log(error);
     }
   }
 
+  //Métodos de los Carritos
   async createCart() {
     try {
       await this.initialize();
@@ -200,8 +212,9 @@ class ProductManager {
       //NO SE AUTOINCREMENTA ID???
       ProductManager.cid++;
       await this.saveCarts();
+      console.log("Carrito creado satisfactoriamente");
     } catch (error) {
-      console.log("Error al crear el carrito:", error);
+      console.log(error);
     }
   }
 
@@ -212,7 +225,7 @@ class ProductManager {
         JSON.stringify(this.carts, null, 2)
       );
     } catch (error) {
-      console.log("Error al guardar los carritos:", error);
+      console.log(error);
     }
   }
 
@@ -237,6 +250,7 @@ class ProductManager {
       const carts = await this.getCarts();
       const cartFound = carts.find((c) => c.id === id);
       if (!cartFound) {
+        console.log(`El carrito con ID "${id}" no existe`);
         return undefined;
       }
       return cartFound;
@@ -250,10 +264,12 @@ class ProductManager {
       await this.initialize();
       const product = await this.getProductById(productId);
       if (!product) {
+        console.log(`No existe el producto "${productId}"`);
         return;
       }
       const cartIndex = this.carts.findIndex((cart) => cart.id === cartId);
       if (cartIndex === -1) {
+        console.log(`No existe el carrito "${cartId}"`);
         return;
       }
       const cart = this.carts[cartIndex];

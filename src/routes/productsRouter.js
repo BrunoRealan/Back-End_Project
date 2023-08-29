@@ -54,25 +54,10 @@ router.put("/:pid", async (req, res) => {
       category,
       thumbnail,
     } = req.body;
-
-    console.log("Update data received:", {
-      productId,
-      title,
-      description,
-      code,
-      price,
-      status,
-      stock,
-      category,
-      thumbnail,
-    });
-
     const productFound = await productManager.getProductById(productId);
-
     if (productFound === undefined) {
       return res.status(400).send();
     }
-
     await productManager.updateProduct(
       productId,
       title,
