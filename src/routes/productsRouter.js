@@ -34,6 +34,10 @@ router.get("/:pid", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const newProduct = await productManager.addProduct(req.body);
+    req.context.socketServer.emit("updateProducts", {
+      action: "add",
+      newProduct,
+    });
     res.status(200).send(newProduct);
   } catch (error) {
     console.error(error);
@@ -69,6 +73,10 @@ router.put("/:pid", async (req, res) => {
       category,
       thumbnail
     );
+    req.context.socketServer.emit("updateProducts", {
+      action: "modify",
+      data: req.body,
+    });
     res.status(200).send();
   } catch (error) {
     console.error(error);
@@ -84,6 +92,10 @@ router.delete("/:pid", async (req, res) => {
       res.status(400).send();
     }
     productManager.deleteProduct(productId);
+    req.context.socketServer.emit("updateProducts", {
+      action: "delete",
+      productId,
+    });
     res.status(200).send();
   } catch (error) {
     console.error(error);

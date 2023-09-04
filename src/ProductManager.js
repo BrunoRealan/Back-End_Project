@@ -42,6 +42,7 @@ class ProductManager {
     }
   }
 
+  //Validacion de campos correctos
   validateProductFields(product) {
     const {
       title,

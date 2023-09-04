@@ -1,1 +1,15 @@
-[]
+[
+  {
+    "id": 0,
+    "title": "cosoooo",
+    "description": "cooooooososososo",
+    "code": "35424",
+    "price": 15,
+    "status": true,
+    "stock": 1000,
+    "category": "cositotototo",
+    "thumbnail": [
+      "imagen.jpg"
+    ]
+  }
+]
