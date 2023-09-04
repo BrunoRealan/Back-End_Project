@@ -75,7 +75,7 @@ router.put("/:pid", async (req, res) => {
     );
     req.context.socketServer.emit("updateProducts", {
       action: "modify",
-      data: req.body,
+      updatedProduct:req.body
     });
     res.status(200).send();
   } catch (error) {

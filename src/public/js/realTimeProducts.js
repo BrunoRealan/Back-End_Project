@@ -1,14 +1,19 @@
+import ProductManager from "../../ProductManager.js";
+
 const socket = io();
-let products = [];
+const productManager = new ProductManager();
+
 
 // Escucha el evento "updateProducts" desde el servidor WebSocket
 socket.on("updateProducts", async (data) => {
   // Actualiza la vista de productos en función de la acción recibida (add, modify, delete)
   if (data.action === "add") {
     // Agrega el nuevo producto a la lista de productos
+    const products = await productManager.getProducts();
     products.push(data.newProduct);
   } else if (data.action === "modify") {
     // Encuentra y actualiza el producto existente
+    const products = await productManager.getProducts();
     const productIndex = products.findIndex(
       (product) => product.id === data.updatedProduct.id
     );
@@ -17,6 +22,7 @@ socket.on("updateProducts", async (data) => {
     }
   } else if (data.action === "delete") {
     // Elimina el producto de la lista
+    const products = await productManager.getProducts();
     products = products.filter((product) => product.id !== data.productId);
   }
 
