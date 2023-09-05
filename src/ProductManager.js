@@ -3,8 +3,8 @@ const productsFile = "./src/products.json";
 const cartsFile = "./src/carts.json";
 
 class ProductManager {
-  static id = 0;
-  static cid = 0;
+  id = 0;
+  cid = 0;
 
   constructor() {
     this.productsPath = productsFile;
@@ -15,6 +15,16 @@ class ProductManager {
   async initialize() {
     this.products = await this.getProducts();
     this.carts = await this.getCarts();
+    const maxProductId = this.products.reduce((maxId, product) => {
+      return product.id > maxId ? product.id : maxId;
+    }, -1);
+
+    const maxCartId = this.carts.reduce((maxCartId, cart) => {
+      return cart.id > maxCartId ? cart.id : maxCartId;
+    }, -1);
+
+    ProductManager.id = maxProductId + 1;
+    ProductManager.cid = maxCartId + 1;
   }
 
   //Métodos de los Productos
@@ -102,9 +112,6 @@ class ProductManager {
         status: true,
       };
       this.products.push(newProduct);
-
-      //NO SE AUTOINCREMENTA ID???
-      ProductManager.id++;
       await this.saveProducts();
       console.log("El producto se agregó correctamente");
     } catch (error) {
@@ -209,9 +216,6 @@ class ProductManager {
         products: [],
       };
       this.carts.push(newCart);
-
-      //NO SE AUTOINCREMENTA ID???
-      ProductManager.cid++;
       await this.saveCarts();
       console.log("Carrito creado satisfactoriamente");
     } catch (error) {
