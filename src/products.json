@@ -1,1 +1,28 @@
-[]
+[
+  {
+    "id": 2,
+    "title": "cosoooo",
+    "description": "cooooooososososo",
+    "code": "354212395",
+    "price": 15,
+    "status": true,
+    "stock": 1000,
+    "category": "cositotototo",
+    "thumbnail": [
+      "imagen.jpg"
+    ]
+  },
+  {
+    "id": 3,
+    "title": "esto no es coso",
+    "description": "cooooooososososo",
+    "code": "354212396",
+    "price": 15,
+    "status": true,
+    "stock": 1000,
+    "category": "cositotototo",
+    "thumbnail": [
+      "imagen.jpg"
+    ]
+  }
+]

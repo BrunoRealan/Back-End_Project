@@ -5,10 +5,12 @@ import http from "http";
 import productsRouter from "./routes/productsRouter.js";
 import cartsRouter from "./routes/cartsRouter.js";
 import viewsRouter from "./routes/viewsRouter.js";
+import ProductManager from "./ProductManager.js";
 
 const app = express();
 const httpServer = http.createServer(app);
 const socketServer = new Server(httpServer);
+const productManager = new ProductManager();
 
 app.engine("handlebars", handlebars.engine());
 app.set("views", "./src/views");
@@ -33,8 +35,9 @@ app.use("/", viewsRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 
-socketServer.on("connection", (socket) => {
+socketServer.on("connection", async (socket) => {
   console.log(`Nuevo cliente conectado de Id:${socket.id}` );
+  socketServer.emit("updateProducts", await productManager.getProducts())
 });
 
 const PORT = process.env.PORT || 8080;

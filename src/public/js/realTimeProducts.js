@@ -1,53 +1,24 @@
-import ProductManager from "../../ProductManager.js";
-
 const socket = io();
-const productManager = new ProductManager();
 
+const productsContainer = document.getElementById("products-container");
 
-// Escucha el evento "updateProducts" desde el servidor WebSocket
-socket.on("updateProducts", async (data) => {
-  // Actualiza la vista de productos en función de la acción recibida (add, modify, delete)
-  if (data.action === "add") {
-    // Agrega el nuevo producto a la lista de productos
-    const products = await productManager.getProducts();
-    products.push(data.newProduct);
-  } else if (data.action === "modify") {
-    // Encuentra y actualiza el producto existente
-    const products = await productManager.getProducts();
-    const productIndex = products.findIndex(
-      (product) => product.id === data.updatedProduct.id
-    );
-    if (productIndex !== -1) {
-      products[productIndex] = data.updatedProduct;
-    }
-  } else if (data.action === "delete") {
-    // Elimina el producto de la lista
-    const products = await productManager.getProducts();
-    products = products.filter((product) => product.id !== data.productId);
-  }
+socket.on("updateProducts", (products) => {
+  let productsHTML = "";
 
-  // Llama a una función para renderizar la vista actualizada
-  renderProductsView(products);
+  products.forEach((product) => {
+    const productHTML = `
+      <p>ID: ${product.id}</p>
+      <p>Nombre: ${product.title}</p>
+      <p>Descripción: ${product.description}</p>
+      <p>Código: ${product.code}</p>
+      <p>Precio: ${product.price}</p>
+      <p>Status: ${product.status}</p>
+      <p>Stock: ${product.stock}</p>
+      <p>Categoría: ${product.category}</p>
+      <br /><br />
+    `;
+    productsHTML += productHTML;
+  });
+
+  productsContainer.innerHTML = productsHTML;
 });
-
-const productsTemplate = `
-{{#each products}}
-    <p>ID: {{this.id}}</p>
-    <p>Nombre: {{this.title}}</p>
-    <p>Descripción: {{this.description}}</p>
-    <p>Código: {{this.code}}</p>
-    <p>Precio: {{this.price}}</p>
-    <p>Status: {{this.status}}</p>
-    <p>Stock: {{this.stock}}</p>
-    <p>Categoría: {{this.category}}</p>
-    <br />
-    <br />
-  {{/each}}
-`;
-
-// Función para renderizar la vista de productos
-function renderProductsView(productsData) {
-  const template = Handlebars.compile(productsTemplate);
-  const renderedHTML = template({ products: productsData });
-  document.getElementById("products-container").innerHTML = renderedHTML;
-}

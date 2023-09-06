@@ -1,19 +1,6 @@
 <div id="products-container">
-  <!-- Aquí se renderizarán los productos -->
-  {{#each products}}
-    <p>ID: {{this.id}}</p>
-    <p>Nombre: {{this.title}}</p>
-    <p>Descripción: {{this.description}}</p>
-    <p>Código: {{this.code}}</p>
-    <p>Precio: {{this.price}}</p>
-    <p>Status: {{this.status}}</p>
-    <p>Stock: {{this.stock}}</p>
-    <p>Categoría: {{this.category}}</p>
-    <br />
-    <br />
-  {{/each}}
+  //Productos Renderizados
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/handlebars/dist/handlebars.min.js"></script>
-<script type="module" src="/js/realTimeProducts.js"></script>
+<script src="/js/realTimeProducts.js"></script>
