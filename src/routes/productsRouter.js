@@ -90,7 +90,7 @@ router.delete("/:pid", async (req, res) => {
     if (productFound === undefined) {
       res.status(400).send();
     }
-    productManager.deleteProduct(productId);
+    await productManager.deleteProduct(productId);
     const products = await productManager.getProducts();
     req.context.socketServer.emit("updateProducts", products);
     res.status(200).send();
