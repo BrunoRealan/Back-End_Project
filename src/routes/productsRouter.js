@@ -1,5 +1,5 @@
 import { Router } from "express";
-import ProductManager from "../ProductManager.js";
+import ProductManager from "../dao/database/ProductManager.js";
 const router = Router();
 const productManager = new ProductManager();
 
@@ -19,7 +19,8 @@ router.get("/", async (req, res) => {
 
 router.get("/:pid", async (req, res) => {
   try {
-    const productId = parseInt(req.params.pid, 10);
+    //const productId = parseInt(req.params.pid, 10);
+    const productId = req.params.pid;
     const product = await productManager.getProductById(productId);
     if (product === undefined) {
       return res.status(400).send();
@@ -35,8 +36,7 @@ router.post("/", async (req, res) => {
   try {
     await productManager.addProduct(req.body);
     const products = await productManager.getProducts();
-    req.context.socketServer.emit("updateProducts", 
-    products);
+    req.context.socketServer.emit("updateProducts", products);
     res.status(200).send();
   } catch (error) {
     console.error(error);
@@ -46,7 +46,8 @@ router.post("/", async (req, res) => {
 
 router.put("/:pid", async (req, res) => {
   try {
-    const productId = parseInt(req.params.pid, 10);
+    //const productId = parseInt(req.params.pid, 10);
+    const productId = req.params.pid;
     const {
       title,
       description,
@@ -83,7 +84,8 @@ router.put("/:pid", async (req, res) => {
 
 router.delete("/:pid", async (req, res) => {
   try {
-    const productId = parseInt(req.params.pid, 10);
+    //const productId = parseInt(req.params.pid, 10);
+    const productId = req.params.pid;
     const productFound = await productManager.getProductById(productId);
     if (productFound === undefined) {
       res.status(400).send();

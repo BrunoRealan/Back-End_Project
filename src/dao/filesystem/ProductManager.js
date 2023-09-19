@@ -1,6 +1,6 @@
 import fs from "fs";
-const productsFile = "./src/products.json";
-const cartsFile = "./src/carts.json";
+const productsFile = "./src/fs_files/products.json";
+const cartsFile = "./src/fs_files/carts.json";
 
 class ProductManager {
   id = 0;

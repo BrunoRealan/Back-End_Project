@@ -7,7 +7,7 @@ socket.on("updateProducts", (products) => {
 
   products.forEach((product) => {
     const productHTML = `
-      <p>ID: ${product.id}</p>
+      <p>ID: ${product._id}</p>
       <p>Nombre: ${product.title}</p>
       <p>Descripción: ${product.description}</p>
       <p>Código: ${product.code}</p>
