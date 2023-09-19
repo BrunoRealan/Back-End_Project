@@ -68,8 +68,8 @@ router.delete("/:cid", async (req, res) => {
       res.status(400).send();
     }
     cartManager.deleteProduct(cartId);
-    const carts = await cartManager.getCarts();
-    req.context.socketServer.emit("updateProducts", carts);
+    const products = await cartManager.getProducts();
+    req.context.socketServer.emit("updateProducts", products);
     res.status(200).send();
   } catch (error) {
     console.error(error);
