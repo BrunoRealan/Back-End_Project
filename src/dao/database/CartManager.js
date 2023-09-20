@@ -3,17 +3,29 @@ import { productModel } from "../models/product.model.js";
 
 export default class CartManger {
   async createCart() {
-    const newCart = await cartModel.create({});
-    console.log(`Id del carrito es:${newCart._id}`);
-    return newCart;
+    try {
+      const newCart = await cartModel.create({});
+      console.log(`Id del carrito es:${newCart._id}`);
+      return newCart;
+    } catch (error) {
+      console.log(error);
+    }
   }
   async getCarts() {
-    const carts = await cartModel.find().lean();
-    return carts;
+    try {
+      const carts = await cartModel.find().lean();
+      return carts;
+    } catch (error) {
+      console.log(error);
+    }
   }
   async getCartById(id) {
-    const cart = await cartModel.find({ _id: id }).lean();
-    return cart;
+    try {
+      const cart = await cartModel.find({ _id: id }).lean();
+      return cart;
+    } catch (error) {
+      console.log(error);
+    }
   }
   async addToCart(cartId, productId) {
     try {
@@ -42,7 +54,7 @@ export default class CartManger {
         const existingProduct = cart.products.find(
           (item) => item._id === productId
         );
-        console.log(existingProduct,"error existing");
+        console.log(existingProduct, "error existing");
 
         if (!existingProduct) {
           // Si el producto no existe en el carrito, agregarlo con cantidad 1
@@ -61,8 +73,14 @@ export default class CartManger {
     }
   }
 
-  async deleteProduct(id) {
-    await cartModel.deleteOne({ _id: id });
-    console.log(`El producto de ID: ${id} ha sido borrado de la DB`);
+  async deleteCart(id) {
+    try {
+      const cartToDelete = await cartModel.findOneAndDelete({ _id: id });
+      cartToDelete
+        ? console.log(`El carrito de Id ${id} ha sido borrado de la DB`)
+        : console.log("El carrito no existe o ya ha sido borrado");
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

@@ -45,7 +45,14 @@ export default class ProductManager {
   }
 
   async deleteProduct(id) {
-    await productModel.deleteOne({ _id: id });
-    console.log(`El producto de ID: ${id} ha sido borrado de la DB`);
+    try {
+      const productToDelete = await productModel.findOneAndDelete({ _id: id });
+
+      productToDelete
+        ? console.log(`El producto de Id ${id} ha sido borrado de la DB`)
+        : console.log("El producto no existe o ya ha sido borrado");
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
