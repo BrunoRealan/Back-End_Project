@@ -5,7 +5,7 @@ const productsContainer = document.getElementById("products-container");
 socket.on("updateProducts", (products) => {
   let productsHTML = "";
 
-  products.forEach((product) => {
+  products.map((product) => {
     const productHTML = `
       <p>ID: ${product._id}</p>
       <p>Nombre: ${product.title}</p>
