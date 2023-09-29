@@ -1,18 +1,17 @@
 import { productModel } from "../models/product.model.js";
-
 export default class ProductManager {
   async getProducts() {
-    const products = await productModel.find().lean();
+    const products = await productModel.paginate({}, [{ lean: true }]);
     return products;
   }
 
   async getProductById(id) {
-    const product = await productModel.find({ _id: id }).lean();
+    const product = await productModel.paginate({ _id: id }, { lean: true });
     return product;
   }
 
   async addProduct(product) {
-    const products = await productModel.find().lean();
+    const products = await productModel.paginate({}, { lean: true });
     if (products.some((p) => p.code === product.code)) {
       console.log(`Ya existe un producto de código "${product.code}"`);
       return;

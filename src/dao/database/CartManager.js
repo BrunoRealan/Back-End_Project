@@ -14,7 +14,7 @@ export default class CartManger {
   }
   async getCarts() {
     try {
-      const carts = await cartModel.find().lean();
+      const carts = await cartModel.paginate({}, { lean: true });
       return carts;
     } catch (error) {
       console.log(error);
@@ -22,7 +22,7 @@ export default class CartManger {
   }
   async getCartById(id) {
     try {
-      const cart = await cartModel.find({ _id: id }).lean();
+      const cart = await cartModel.paginate({ _id: id }, { lean: true });
       return cart;
     } catch (error) {
       console.log(error);

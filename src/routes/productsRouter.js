@@ -1,24 +1,54 @@
 import { Router } from "express";
 import ProductManager from "../dao/database/ProductManager.js";
+import { productModel } from "../dao/models/product.model.js";
 const router = Router();
 const productManager = new ProductManager();
 
 router.get("/", async (req, res) => {
   try {
-    const limit = req.query.limit;
-    const products = await productManager.getProducts();
-    if (limit) {
-      return res.status(200).send(products.slice(0, limit));
-    }
-    res.status(200).send(products);
+    const { limit, query, sort, page } = req.query;
+    const sortObjectMapper = {
+      asc: { price: 1 },
+      desc: { price: -1 },
+    };
+
+    const modelQuery = query ? JSON.parse(query) : {};
+    const modelLimit = limit ? parseInt(limit, 10) : 10;
+    const modelPage = page ? parseInt(page, 10) : 1;
+    const modelSort = sortObjectMapper[sort] ?? undefined;
+
+    const products = await productModel.paginate(modelQuery, {
+      limit: modelLimit,
+      page: modelPage,
+      sort: modelSort,
+    });
+
+    const response = {
+      status: "success",
+      payload: products.docs,
+      totalPages: products.totalPages,
+      prevPage: products.prevPage,
+      nextPage: products.nextPage,
+      page: products.page,
+      hasPrevPage: products.hasPrevPage,
+      hasNextPage: products.hasNextPage,
+      prevLink: products.hasPrevPage
+        ? `http://localhost:8080/api/products/?page=${products.prevPage}`
+        : null,
+      nextLink: products.hasNextPage
+        ? `http://localhost:8080/api/products/?page=${products.nextPage}`
+        : null,
+    };
+
+    res.status(200).send(response);
   } catch (error) {
-    console.error(error);
-    res.status(500).send();
+    console.log(error);
   }
 });
 
 router.get("/:pid", async (req, res) => {
   try {
+    //FS METHOD
     //const productId = parseInt(req.params.pid, 10);
     const productId = req.params.pid;
     const product = await productManager.getProductById(productId);

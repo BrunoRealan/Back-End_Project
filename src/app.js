@@ -10,45 +10,53 @@ import cartsRouter from "./routes/cartsRouter.js";
 import ProductManager from "./dao/database/ProductManager.js";
 import ChatManager from "./dao/database/ChatManager.js";
 import mongoose from "mongoose";
-mongoose.connect(
-  "mongodb+srv://brunorealans:e82fiswHI1Qlcvbj@cluster0.4hwnhab.mongodb.net/ecommerce?retryWrites=true&w=majority"
-);
 
-const app = express();
-const httpServer = http.createServer(app);
-const socketServer = new Server(httpServer);
-const productManager = new ProductManager();
-const chatManager = new ChatManager();
+const environment = async () => {
+  try {
+    await mongoose.connect(
+      "mongodb+srv://brunorealans:e82fiswHI1Qlcvbj@cluster0.4hwnhab.mongodb.net/ecommerce?retryWrites=true&w=majority"
+    );
 
-app.engine("handlebars", handlebars.engine());
-app.set("views", "./src/views");
-app.set("view engine", "handlebars");
-app.use(express.static("./src/public"));
+    const app = express();
+    const httpServer = http.createServer(app);
+    const socketServer = new Server(httpServer);
+    const productManager = new ProductManager();
+    const chatManager = new ChatManager();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+    app.engine("handlebars", handlebars.engine());
+    app.set("views", "./src/views");
+    app.set("view engine", "handlebars");
+    app.use(express.static("./src/public"));
 
-app.use((req, res, next) => {
-  req.context = { socketServer };
-  next();
-});
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
 
-app.use("/", viewsRouter);
-app.use("/chat", chatRouter);
-app.use("/api/products", productsRouter);
-app.use("/api/carts", cartsRouter);
+    app.use((req, res, next) => {
+      req.context = { socketServer };
+      next();
+    });
 
-socketServer.on("connection", async (socket) => {
-  console.log(`Nuevo cliente conectado de Id: ${socket.id}`);
-  socketServer.emit("updateProducts", await productManager.getProducts());
-  socket.on("message", async (data) => {
-    await chatManager.addMessage(data);
-    socketServer.emit("updateChat", await chatManager.getChat());
-  });
-});
+    app.use("/", viewsRouter);
+    app.use("/chat", chatRouter);
+    app.use("/api/products", productsRouter);
+    app.use("/api/carts", cartsRouter);
 
-const PORT = process.env.PORT || 8080;
+    socketServer.on("connection", async (socket) => {
+      console.log(`Nuevo cliente conectado de Id: ${socket.id}`);
+      socketServer.emit("updateProducts", await productManager.getProducts());
+      socket.on("message", async (data) => {
+        await chatManager.addMessage(data);
+        socketServer.emit("updateChat", await chatManager.getChat());
+      });
+    });
 
-httpServer.listen(PORT, () => {
-  console.log(`Servidor HTTP y WebSocket escuchando en el puerto ${PORT}`);
-});
+    const PORT = process.env.PORT || 8080;
+
+    httpServer.listen(PORT, () => {
+      console.log(`Servidor HTTP y WebSocket escuchando en el puerto ${PORT}`);
+    });
+  } catch (error) {
+    console.log(error, "Error de conección");
+  }
+};
+environment();
