@@ -2,14 +2,14 @@
 <h3>Estos son los siguientes productos:</h3>
 
 {{#each response.payload}}
-  <p>Nombre: {{this.title}}</p>
-  <p>Descripción: {{this.description}}</p>
-  <p>Código: {{this.code}}</p>
-  <p>Precio: {{this.price}}</p>
-  <p>Status: {{this.status}}</p>
-  <p>Stock: {{this.stock}}</p>
-  <p>Categoría: {{this.category}}</p>
-  <button class="addToCartButton" data-product-id="{{this._id}}">Agregar al Carrito</button>
+  <p>Nombre: {{title}}</p>
+  <p>Descripción: {{description}}</p>
+  <p>Código: {{code}}</p>
+  <p>Precio: {{price}}</p>
+  <p>Status: {{status}}</p>
+  <p>Stock: {{stock}}</p>
+  <p>Categoría: {{category}}</p>
+  <button class="addToCartButton" data-product-id="{{_id}}">Agregar al Carrito</button>
   <br />
   <br />
   <br />
