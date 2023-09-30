@@ -2,6 +2,8 @@ import { Router } from "express";
 //import ProductManager from "../dao/filesystem/ProductManager.js";
 import { productModel } from "../dao/models/product.model.js";
 import { cartModel } from "../dao/models/cart.model.js";
+import publicRoutes from "../middleware/publicRoutes.js";
+import privateRoutes from "../middleware/privateRoutes.js";
 
 const router = Router();
 
@@ -13,6 +15,7 @@ router.get("/", async (req, res) => {
 
 router.get("/products", async (req, res) => {
   try {
+    const { first_name, last_name, email, age } = req.session;
     const { limit, query, sort, page } = req.query;
     const sortObjectMapper = {
       asc: { price: 1 },
@@ -47,7 +50,7 @@ router.get("/products", async (req, res) => {
         ? `http://localhost:8080/products/?page=${products.nextPage}`
         : null,
     };
-    res.render("products", { response });
+    res.render("products", { response, first_name, last_name, email, age });
   } catch (error) {
     console.log(error);
     res.status(404).send();
@@ -56,13 +59,14 @@ router.get("/products", async (req, res) => {
 
 router.get("/cart/:cId", async (req, res) => {
   try {
+    const { first_name, last_name, email, age } = req.session;
     const cartId = req.params.cId.trim(); //trim() Elimina espacios en blanco al principio y al final de params
     const cart = await cartModel
       .findOne({ _id: cartId })
       .populate("products.product");
     const productsOfCart = cart.products;
     console.log(productsOfCart);
-    res.render("cart", { productsOfCart });
+    res.render("cart", { productsOfCart, first_name, last_name, email, age });
   } catch (error) {
     console.error(error);
     res.status(500).send();
@@ -75,6 +79,24 @@ router.get("/realtimeproducts", async (req, res) => {
 
 router.get("/chat", async (req, res) => {
   res.render("chat", {});
+});
+
+router.get("/signup", publicRoutes, async (req, res) => {
+  res.render("signup");
+});
+
+router.get("/login", publicRoutes, async (req, res) => {
+  res.render("login");
+});
+
+router.get("/logout", (req, res) => {
+  req.session.destroy();
+  res.redirect("/login");
+});
+
+router.get("/profile", privateRoutes, async (req, res) => {
+  const { first_name, last_name, email, age } = req.session;
+  res.render("profile", { first_name, last_name, email, age });
 });
 
 export default router;
