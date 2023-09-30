@@ -15,15 +15,15 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:cid", async (req, res) => {
+router.get("/:cId", async (req, res) => {
   try {
     //FS METHOD
-    /*const cartId = parseInt(req.params.cid, 10);
+    /*const cartId = parseInt(req.params.cId, 10);
          if (isNaN(cartId) || cartId < 0) {
       return res.status(400).send();
     }
     */
-    const cartId = req.params.cid.trim(); //trim() Elimina espacios en blanco al principio y al final del param
+    const cartId = req.params.cId.trim(); //trim() Elimina espacios en blanco al principio y al final del param
     //const cart = await cartManager.getCartById(cartId);
     const cart = await cartModel
       .findOne({ _id: cartId })
@@ -47,12 +47,12 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.post("/:cid/products/:pid", async (req, res) => {
+router.post("/:cId/products/:pId", async (req, res) => {
   try {
-    //const cartId = parseInt(req.params.cid, 10);
-    //const productId = parseInt(req.params.pid, 10);
-    const cartId = req.params.cid.trim();
-    const productId = req.params.pid.trim();
+    //const cartId = parseInt(req.params.cId, 10);
+    //const productId = parseInt(req.params.pId, 10);
+    const cartId = req.params.cId.trim();
+    const productId = req.params.pId.trim();
 
     /*     if (isNaN(cartId) || cartId < 0 || isNaN(productId) || productId < 0) {
       return res.status(400).send();
@@ -66,13 +66,11 @@ router.post("/:cid/products/:pid", async (req, res) => {
   }
 });
 
-router.put("/:cid", async (req, res) => {
+router.put("/:cId", async (req, res) => {
   try {
     const { products } = req.body;
     await cartModel.updateOne(
-      {
-        _id: req.params.cid.trim(),
-      },
+      { _id: req.params.cId.trim() },
       { products: products }
     );
     res.status(200).send();
@@ -82,10 +80,10 @@ router.put("/:cid", async (req, res) => {
   }
 });
 
-router.put("/:cid/products/:pid", async (req, res) => {
+router.put("/:cId/products/:pId", async (req, res) => {
   try {
-    const cartId = req.params.cid.trim();
-    const productId = req.params.pid.trim();
+    const cartId = req.params.cId.trim();
+    const productId = req.params.pId.trim();
     const { quantity } = req.body;
 
     const cart = await cartModel.findOne({ _id: cartId });
@@ -108,9 +106,9 @@ router.put("/:cid/products/:pid", async (req, res) => {
   }
 });
 
-router.delete("/:cid/products/:pid", async (req, res) => {
-  const cartId = req.params.cid.trim();
-  const productId = req.params.pid.trim();
+router.delete("/:cId/products/:pId", async (req, res) => {
+  const cartId = req.params.cId.trim();
+  const productId = req.params.pId.trim();
 
   try {
     const result = await cartModel.findOneAndUpdate(
@@ -129,8 +127,8 @@ router.delete("/:cid/products/:pid", async (req, res) => {
   }
 });
 
-router.delete("/:cid", async (req, res) => {
-  const cartId = req.params.cid.trim();
+router.delete("/:cId", async (req, res) => {
+  const cartId = req.params.cId.trim();
 
   try {
     const result = await cartModel.findOneAndUpdate(

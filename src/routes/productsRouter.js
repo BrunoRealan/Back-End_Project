@@ -21,6 +21,7 @@ router.get("/", async (req, res) => {
       limit: modelLimit,
       page: modelPage,
       sort: modelSort,
+      lean: true,
     });
 
     const response = {
@@ -33,16 +34,17 @@ router.get("/", async (req, res) => {
       hasPrevPage: products.hasPrevPage,
       hasNextPage: products.hasNextPage,
       prevLink: products.hasPrevPage
-        ? `http://localhost:8080/api/products/?page=${products.prevPage}`
+        ? `http://localhost:8080/products/?page=${products.prevPage}`
         : null,
       nextLink: products.hasNextPage
-        ? `http://localhost:8080/api/products/?page=${products.nextPage}`
+        ? `http://localhost:8080/products/?page=${products.nextPage}`
         : null,
     };
-
     res.status(200).send(response);
+    
   } catch (error) {
     console.log(error);
+    res.status(404).send();
   }
 });
 
@@ -58,7 +60,7 @@ router.get("/:pid", async (req, res) => {
     res.status(200).send(product);
   } catch (error) {
     console.error(error);
-    res.status(500).send();
+    res.status(404).send();
   }
 });
 

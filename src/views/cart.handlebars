@@ -1,0 +1,15 @@
+<h1>Bienvenido/a a la tienda BackEnd</h1>
+<h3>Estos son los siguientes productos que tienes en tu carrito:</h3>
+
+{{#each productsOfCart}}
+  <p>Nombre: {{this.product.title}}</p>
+  <p>Descripción: {{this.product.description}}</p>
+  <p>Categoría: {{this.product.category}}</p>
+  <p>Precio: {{this.product.price}}</p>
+  <p>Cantidad: {{this.quantity}}</p>
+  <p>Código: {{this.product.code}}</p>
+  <p>Stock: {{this.product.stock}}</p>
+  <br />
+  <br />
+  <br />
+{{/each}}

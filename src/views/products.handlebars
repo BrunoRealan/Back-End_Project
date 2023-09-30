@@ -1,0 +1,23 @@
+<h1>Bienvenido/a a la tienda BackEnd</h1>
+<h3>Estos son los siguientes productos:</h3>
+
+{{#each response.payload}}
+  <p>Nombre: {{this.title}}</p>
+  <p>Descripción: {{this.description}}</p>
+  <p>Código: {{this.code}}</p>
+  <p>Precio: {{this.price}}</p>
+  <p>Status: {{this.status}}</p>
+  <p>Stock: {{this.stock}}</p>
+  <p>Categoría: {{this.category}}</p>
+  <button class="addToCartButton" data-product-id="{{this._id}}">Agregar al Carrito</button>
+  <br />
+  <br />
+  <br />
+{{/each}}
+
+<a href="{{response.prevLink}}">Pagina Anterior: {{response.prevPage}}</a>
+<br />
+<a href="{{response.nextLink}}">Pagina Siguiente: {{response.nextPage}}</a>
+
+
+<script type="module" src="/js/products.js"></script>

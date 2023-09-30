@@ -37,6 +37,8 @@ const environment = async () => {
     });
 
     app.use("/", viewsRouter);
+    app.use("/products", viewsRouter);
+    app.use("/cart",viewsRouter);
     app.use("/chat", chatRouter);
     app.use("/api/products", productsRouter);
     app.use("/api/carts", cartsRouter);

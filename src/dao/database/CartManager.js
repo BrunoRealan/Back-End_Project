@@ -12,6 +12,7 @@ export default class CartManger {
       console.log(error);
     }
   }
+
   async getCarts() {
     try {
       const carts = await cartModel.paginate({}, { lean: true });
@@ -20,6 +21,7 @@ export default class CartManger {
       console.log(error);
     }
   }
+
   async getCartById(id) {
     try {
       const cart = await cartModel.paginate({ _id: id }, { lean: true });
@@ -28,25 +30,28 @@ export default class CartManger {
       console.log(error);
     }
   }
+
   async addToCart(cartId, productId) {
     try {
       // Verificar si el producto existe
       const productIdObject = new mongoose.Types.ObjectId(productId);
       const product = await productModel.findOne({ _id: productId });
+      console.log(product);
       if (!product) {
         console.log(`No existe el producto "${productId}"`);
         return;
       }
       // Verificar si existe un carrito con el cartId proporcionado
-      let cart = await cartModel.findOne({ _id: cartId });
+      const cart = await cartModel.findOne({ _id: cartId });
       if (!cart) {
         console.log(`El carrito de ID:${cartId} no existe`);
         return;
       } else {
         // Si el carrito ya existe, verificar si el producto con productId ya está en el carrito
-        const existingProduct = cart.products.find((item) =>
-          item.product.equals(productIdObject)
-        );
+        const existingProduct = cart.products.find((item) => {
+          return item.product.equals(productIdObject);
+        });
+        console.log(existingProduct);
         if (!existingProduct) {
           // Si el producto no existe en el carrito, agregarlo con cantidad 1
           cart.products.push({ product: productIdObject, quantity: 1 });
