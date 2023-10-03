@@ -64,9 +64,10 @@ router.get("/cart/:cId", async (req, res) => {
     const cartId = req.params.cId.trim(); //trim() Elimina espacios en blanco al principio y al final de params
     const cart = await cartModel
       .findOne({ _id: cartId })
-      .populate("products.product");
+      .populate("products.product")
+      .lean();
     const productsOfCart = cart.products;
-    console.log(productsOfCart);//PRODUCTOS CORRECTOS
+    console.log(productsOfCart); //PRODUCTOS CORRECTOS
     res.render("cart", { productsOfCart, first_name, last_name, email, age });
   } catch (error) {
     console.error(error);
