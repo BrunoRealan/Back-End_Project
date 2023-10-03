@@ -57,6 +57,7 @@ router.get("/products", async (req, res) => {
   }
 });
 
+//FUNCION DEL PROBLEMA A RESOLVER!
 router.get("/cart/:cId", async (req, res) => {
   try {
     const { first_name, last_name, email, age } = req.session;
@@ -65,7 +66,7 @@ router.get("/cart/:cId", async (req, res) => {
       .findOne({ _id: cartId })
       .populate("products.product");
     const productsOfCart = cart.products;
-    console.log(productsOfCart);
+    console.log(productsOfCart);//PRODUCTOS CORRECTOS
     res.render("cart", { productsOfCart, first_name, last_name, email, age });
   } catch (error) {
     console.error(error);
