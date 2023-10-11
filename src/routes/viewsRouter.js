@@ -96,6 +96,10 @@ router.get("/logout", (req, res) => {
   res.redirect("/login");
 });
 
+router.get("/failregister", (req, res) => {
+  res.send("Fallo de registro");
+});
+
 router.get("/profile", privateRoutes, async (req, res) => {
   const { first_name, last_name, email, age } = req.session;
   res.render("profile", { first_name, last_name, email, age });

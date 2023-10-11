@@ -13,6 +13,8 @@ import cartsRouter from "./routes/cartsRouter.js";
 //import ProductManager from "./dao/filesystem/ProductManager.js";
 import ProductManager from "./dao/database/ProductManager.js";
 import ChatManager from "./dao/database/ChatManager.js";
+import passport from "passport";
+import initializePassort from "./config/passport.config.js";
 
 const environment = async () => {
   try {
@@ -46,16 +48,20 @@ const environment = async () => {
       })
     );
 
+    initializePassort();
+    app.use(passport.initialize());
+    app.use(passport.session());
+
     app.use((req, res, next) => {
       req.context = { socketServer };
       next();
     });
 
-    app.use("/", viewsRouter);
     app.use("/api", userRouter);
     app.use("/chat", chatRouter);
     app.use("/api/products", productsRouter);
     app.use("/api/carts", cartsRouter);
+    app.use("/", viewsRouter);
 
     socketServer.on("connection", async (socket) => {
       console.log(`Nuevo cliente conectado de Id: ${socket.id}`);
