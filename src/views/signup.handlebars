@@ -1,8 +1,22 @@
+<h1>Bienvenido/a a la Ecommerce Web:</h1>
+<h3>Por favor, registrate para poder comprar</h3>
+<br />
+
 <form action="/api/signup" method="post">
-  <input type="text" name="first_name" value="first_name" />
-  <input type="text" name="last_name" value="last_name" />
-  <input type="text" name="email" value="email" />
-  <input type="number" name="age" value="35" />
-  <input type="text" name="password" value="password" />
+  <span>Nombre:</span>
+  <input type="text" name="first_name" value="" placeholder="Jacinto" />
+  <span>Apellido:</span>
+  <input type="text" name="last_name" value="" placeholder="de las Mercedes" />
+  <span>Email:</span>
+  <input type="text" name="email" value="" placeholder="ejemplo@gmail.com" />
+  <span>Edad:</span>
+  <input type="number" name="age" value="" placeholder="39" />
+  <span>Password:</span>
+  <input type="text" name="password" value="" placeholder="P@sSW0rD" />
   <button value="sumbit">Registrarse</button>
 </form>
+<br />
+<a href="http://localhost:8080/login">Logueate!</a>
+<br />
+<br />
+<a href="http://localhost:8080/products">Volver a productos</a>

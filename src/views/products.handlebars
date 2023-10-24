@@ -9,12 +9,16 @@
   <p>Status: {{status}}</p>
   <p>Stock: {{stock}}</p>
   <p>Categoría: {{category}}</p>
-  <button class="addToCartButton" data-product-id="{{_id}}">Agregar al Carrito</button>
+  <button class="addToCartButton" data-product-id="{{_id}}" data-cart-id="{{cart}}">Agregar al Carrito</button>
   <br />
   <br />
   <br />
 {{/each}}
 
+<a href="http://localhost:8080/cart/{{response.payload.cart}}">Ir al Carrito!</a>
+<br />
+<br />
+<br />
 <a href="{{response.prevLink}}">Pagina Anterior: {{response.prevPage}}</a>
 <br />
 <a href="{{response.nextLink}}">Pagina Siguiente: {{response.nextPage}}</a>

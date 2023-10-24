@@ -3,6 +3,7 @@ import local from "passport-local";
 import GithubStrategy from "passport-github2";
 import bcrypt from "bcrypt";
 import { userModel } from "../dao/models/user.model.js";
+import { cartModel } from "../dao/models/cart.model.js";
 
 const LocalStrategy = local.Strategy;
 const initializePassort = () => {
@@ -12,19 +13,22 @@ const initializePassort = () => {
       { passReqToCallback: true, usernameField: "email" },
       async (req, username, password, done) => {
         try {
-          const { first_name, last_name, email, age } = req.body;
-          const userExists = await userModel.findOne({ email });
+          const { first_name, last_name, age } = req.body;
+          const userExists = await userModel.findOne({ username });
 
           if (userExists) {
             return done(null, false);
           }
+          const cart = await cartModel.create({});
 
           const user = await userModel.create({
             first_name,
             last_name,
-            email,
+            email: username,
             age,
             password: bcrypt.hashSync(password, bcrypt.genSaltSync(10)),
+            cart: cart._id,
+            role: "user",
           });
 
           return done(null, user);
@@ -55,7 +59,7 @@ const initializePassort = () => {
           if (!bcrypt.compareSync(password, user.password)) {
             return done(null, false);
           }
-          
+
           return done(null, user);
         } catch (error) {
           done(error);
@@ -75,16 +79,21 @@ const initializePassort = () => {
       },
       async (accesTocken, refreshToken, profile, done) => {
         try {
+          console.log(profile, "profile");
           const email = profile.emails[0].value;
           const user = await userModel.findOne({ email });
-
+          console.log(user, "user");
           if (!user) {
+            const newCart = await cartModel.create({});
+
             const newUser = await userModel.create({
               first_name: profile._json.name,
               last_name: "",
+              email,
               age: 32,
               password: "",
-              email,
+              cart: newCart._id,
+              role: "user",
             });
             return done(null, newUser);
           }

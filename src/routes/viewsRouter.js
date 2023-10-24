@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
 
 router.get("/products", async (req, res) => {
   try {
-    const { first_name, last_name, email, age } = req.session;
+    const { first_name, last_name, email, age, role, cart } = req.session;
     const { limit, query, sort, page } = req.query;
     const sortObjectMapper = {
       asc: { price: 1 },
@@ -50,14 +50,29 @@ router.get("/products", async (req, res) => {
         ? `http://localhost:8080/products/?page=${products.nextPage}`
         : null,
     };
-    res.render("products", { response, first_name, last_name, email, age });
+
+    //SETEO CART ID AL RESPONSE DE CADA BOTON
+    response.payload.forEach((e) => {
+      e.cart = cart;
+    });
+    //SETEO CART ID AL RESPONSE PARA LINK A CART
+    response.payload.cart = cart;
+    console.log(response.payload);
+
+    res.render("products", {
+      response,
+      first_name,
+      last_name,
+      email,
+      age,
+      role,
+    });
   } catch (error) {
     console.log(error);
     res.status(404).send();
   }
 });
 
-//FUNCION DEL PROBLEMA A RESOLVER!
 router.get("/cart/:cId", async (req, res) => {
   try {
     const { first_name, last_name, email, age } = req.session;
@@ -101,8 +116,8 @@ router.get("/failregister", (req, res) => {
 });
 
 router.get("/profile", privateRoutes, async (req, res) => {
-  const { first_name, last_name, email, age } = req.session;
-  res.render("profile", { first_name, last_name, email, age });
+  const { first_name, last_name, email, age, role, cart } = req.session;
+  res.render("profile", { first_name, last_name, email, age, role, cart });
 });
 
 export default router;
