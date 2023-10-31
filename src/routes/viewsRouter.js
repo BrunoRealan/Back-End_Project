@@ -9,6 +9,7 @@ const router = Router();
 
 router.get("/", async (req, res) => {
   const products = await productModel.paginate({}, { lean: true });
+  console.log(products);
   const productsDoc = products.docs;
   res.render("home", { productsDoc });
 });
@@ -33,7 +34,7 @@ router.get("/products", async (req, res) => {
       sort: modelSort,
       lean: true,
     });
-
+    console.log(products);
     const response = {
       status: "success",
       payload: products.docs,
@@ -50,6 +51,8 @@ router.get("/products", async (req, res) => {
         ? `http://localhost:8080/products/?page=${products.nextPage}`
         : null,
     };
+
+    console.log(products);
 
     //SETEO CART ID AL RESPONSE DE CADA BOTON
     response.payload.forEach((e) => {
@@ -81,6 +84,8 @@ router.get("/cart/:cId", async (req, res) => {
       .findOne({ _id: cartId })
       .populate("products.product")
       .lean();
+
+    console.log(cart);
     const productsOfCart = cart.products;
     console.log(productsOfCart); //PRODUCTOS CORRECTOS
     res.render("cart", { productsOfCart, first_name, last_name, email, age });
