@@ -1,10 +1,12 @@
 import passport from "passport";
 import local from "passport-local";
+import dotenv from "dotenv";
 import GithubStrategy from "passport-github2";
 import bcrypt from "bcrypt";
-import { userModel } from "../dao/models/user.model.js";
-import { cartModel } from "../dao/models/cart.model.js";
+import { userModel } from "../dao/database/models/user.model.js";
+import { cartModel } from "../dao/database/models/cart.model.js";
 
+dotenv.config();
 const LocalStrategy = local.Strategy;
 const initializePassort = () => {
   passport.use(
@@ -72,8 +74,8 @@ const initializePassort = () => {
     "github",
     new GithubStrategy(
       {
-        clientID: "Iv1.b72a2fc9d97517ae",
-        clientSecret: "f4279a1300bad3226354789a9af1fd8d0f5ec341",
+        clientID: process.env.PASSPORT_GITHUB_CLIENTID,
+        clientSecret: process.env.PASSPORT_GITHUB_CLIENTSECRET,
         callbackURL: "http://localhost:8080/api/githubcallback",
         scope: ["user:email"],
       },

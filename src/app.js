@@ -5,6 +5,7 @@ import MongoStore from "connect-mongo";
 import session from "express-session";
 import { Server } from "socket.io";
 import http from "http";
+import dotenv from "dotenv";
 import viewsRouter from "./routes/viewsRouter.js";
 import userRouter from "./routes/userRouter.js";
 import chatRouter from "./routes/chatRouter.js";
@@ -18,9 +19,9 @@ import initializePassort from "./config/passport.config.js";
 
 const environment = async () => {
   try {
-    await mongoose.connect(
-      "mongodb+srv://brunorealans:e82fiswHI1Qlcvbj@cluster0.4hwnhab.mongodb.net/ecommerce?retryWrites=true&w=majority"
-    );
+    dotenv.config();
+    const MONGO_URL = process.env.MONGO_URL;
+    await mongoose.connect(MONGO_URL);
 
     const app = express();
     const httpServer = http.createServer(app);
@@ -39,10 +40,9 @@ const environment = async () => {
     app.use(
       session({
         store: MongoStore.create({
-          mongoUrl:
-            "mongodb+srv://brunorealans:e82fiswHI1Qlcvbj@cluster0.4hwnhab.mongodb.net/ecommerce?retryWrites=true&w=majority",
+          mongoUrl: MONGO_URL,
         }),
-        secret: "pr9?ed=@$#ñq%&/($#)==hxurdfeqpoa!?",
+        secret: process.env.MONGO_SECRET,
         resave: false,
         saveUninitialized: false,
       })
@@ -72,8 +72,7 @@ const environment = async () => {
       });
     });
 
-    const PORT = process.env.PORT || 8080;
-
+    const PORT = process.env.PORT;
     httpServer.listen(PORT, () => {
       console.log(`Servidor HTTP y WebSocket escuchando en el puerto ${PORT}`);
     });

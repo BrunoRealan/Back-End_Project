@@ -1,6 +1,6 @@
 import { Router } from "express";
 import ProductManager from "../dao/database/ProductManager.js";
-import { productModel } from "../dao/models/product.model.js";
+import { productModel } from "../dao/database/models/product.model.js";
 const router = Router();
 const productManager = new ProductManager();
 
@@ -50,7 +50,7 @@ router.get("/", async (req, res) => {
 
 router.get("/:pid", async (req, res) => {
   try {
-    //FS METHOD
+    //METODO DE FS, EN MDB EL ID ES STRING NO NUMBER
     //const productId = parseInt(req.params.pid, 10);
     const productId = req.params.pid;
     const product = await productManager.getProductById(productId);

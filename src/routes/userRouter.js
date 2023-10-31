@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { userModel } from "../dao/models/user.model.js";
+import { userModel } from "../dao/database/models/user.model.js";
 import bcrypt from "bcrypt";
 import passport from "passport";
 
