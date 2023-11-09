@@ -72,7 +72,7 @@ const environment = async () => {
       });
     });
 
-    const PORT = process.env.PORT;
+    const PORT = process.env.PORT || 3000;
     httpServer.listen(PORT, () => {
       console.log(`Servidor HTTP y WebSocket escuchando en el puerto ${PORT}`);
     });

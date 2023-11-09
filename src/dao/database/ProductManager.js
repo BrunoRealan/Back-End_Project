@@ -1,8 +1,44 @@
 import { productModel } from "./models/product.model.js";
 export default class ProductManager {
-  async getProducts() {
-    const products = await productModel.paginate({}, [{ lean: true }]);
-    return products;
+  async getProducts(limit, query, sort, page) {
+    try {
+      const sortObjectMapper = {
+        asc: { price: 1 },
+        desc: { price: -1 },
+      };
+
+      const modelLimit = limit ? parseInt(limit, 10) : 10;
+      const modelQuery = query ? JSON.parse(query) : {};
+      const modelSort = sortObjectMapper[sort] ?? undefined;
+      const modelPage = page ? parseInt(page, 10) : 1;
+
+      const products = await productModel.paginate(modelQuery, {
+        limit: modelLimit,
+        page: modelPage,
+        sort: modelSort,
+        lean: true,
+      });
+
+      const response = {
+        status: "success",
+        payload: products.docs,
+        totalPages: products.totalPages,
+        prevPage: products.prevPage,
+        nextPage: products.nextPage,
+        page: products.page,
+        hasPrevPage: products.hasPrevPage,
+        hasNextPage: products.hasNextPage,
+        prevLink: products.hasPrevPage
+          ? `http://localhost:8080/products/?page=${products.prevPage}`
+          : null,
+        nextLink: products.hasNextPage
+          ? `http://localhost:8080/products/?page=${products.nextPage}`
+          : null,
+      };
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async getProductById(id) {
