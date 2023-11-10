@@ -1,5 +1,5 @@
-import { cartModel } from "./models/cart.model.js";
-import { productModel } from "./models/product.model.js";
+import { cartModel } from "./models/cartModel.js";
+import { productModel } from "./models/productModel.js";
 import mongoose from "mongoose";
 
 export default class CartManger {
@@ -26,7 +26,8 @@ export default class CartManger {
     try {
       const cart = await cartModel
         .findOne({ _id: id })
-        .populate("products.product");
+        .populate("products.product")
+        .lean();
       return cart === null
         ? console.log("No existe el carrito seleccionado")
         : cart.products;

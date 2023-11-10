@@ -3,8 +3,8 @@ import local from "passport-local";
 import dotenv from "dotenv";
 import GithubStrategy from "passport-github2";
 import bcrypt from "bcrypt";
-import { userModel } from "../dao/database/models/user.model.js";
-import { cartModel } from "../dao/database/models/cart.model.js";
+import { userModel } from "../dao/database/models/userModel.js";
+import { cartModel } from "../dao/database/models/cartModel.js";
 
 dotenv.config();
 const LocalStrategy = local.Strategy;

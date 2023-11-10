@@ -8,7 +8,7 @@ import {
   getCarts,
   modifyQuantityInCart,
   updateCart,
-} from "../controllers/cartControllers.js";
+} from "../controllers/cartController.js";
 
 const router = Router();
 

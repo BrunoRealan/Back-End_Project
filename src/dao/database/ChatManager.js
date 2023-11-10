@@ -1,4 +1,4 @@
-import { messageModel } from "./models/message.model.js"
+import { messageModel } from "./models/messageModel.js"
 
 export default class ChatManager {
     async getChat (){

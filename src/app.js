@@ -15,7 +15,7 @@ import cartsRouter from "./routes/cartsRouter.js";
 import ProductManager from "./dao/database/ProductManager.js";
 import ChatManager from "./dao/database/ChatManager.js";
 import passport from "passport";
-import initializePassort from "./config/passport.config.js";
+import initializePassort from "./config/passportConfig.js";
 
 const environment = async () => {
   try {
@@ -74,7 +74,7 @@ const environment = async () => {
 
     const PORT = process.env.PORT || 3000;
     httpServer.listen(PORT, () => {
-      console.log(`Servidor HTTP y WebSocket escuchando en el puerto ${PORT}`);
+      console.log(`HTTP server and WebSocket listening to ${PORT}`);
     });
   } catch (error) {
     console.log(error, "Error de conección");
