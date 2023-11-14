@@ -53,6 +53,7 @@ export const updateProduct = async (req, res) => {
       category,
       thumbnail,
     } = req.body;
+
     const productFound = await productManager.getProductById(productId);
     if (productFound === undefined) {
       return res.status(400).send();
@@ -68,7 +69,7 @@ export const updateProduct = async (req, res) => {
       category,
       thumbnail
     );
-    const products = await productManager.getProducts();
+    const products = await productManager.getProductsAll();
     req.context.socketServer.emit("updateProducts", products);
     res.status(200).send();
   } catch (error) {
@@ -85,6 +86,7 @@ export const deleteProduct = async (req, res) => {
     if (productFound === undefined) {
       res.status(400).send();
     }
+    console.log(productFound);
     await productManager.deleteProduct(productId);
     const products = await productManager.getProducts();
     req.context.socketServer.emit("updateProducts", products);

@@ -2,17 +2,19 @@
   {{last_name}}
   tiene los siguientes productos en su carrito:</h2>
 
-{{#each response}}
-  <p>Nombre: {{product.title}}</p>
-  <p>Descripción: {{product.description}}</p>
-  <p>Categoría: {{product.category}}</p>
-  <p>Precio: {{product.price}}</p>
-  <p>Cantidad: {{quantity}}</p>
-  <p>Código: {{product.code}}</p>
-  <p>Stock: {{product.stock}}</p>
-  <br />
-  <br />
-  <br />
+{{#each response.products}}
+  <div>
+    <p>Nombre: {{product.title}}</p>
+    <p>Descripción: {{product.description}}</p>
+    <p>Categoría: {{product.category}}</p>
+    <p>Precio: {{product.price}}</p>
+    <p>Cantidad: {{quantity}}</p>
+    <p>Código: {{product.code}}</p>
+    <p>Stock: {{product.stock}}</p>
+    <br />
+    <br />
+    <br />
+  </div>
 {{/each}}
 
 <a href="http://localhost:8080/products">Volver a Productos</a>

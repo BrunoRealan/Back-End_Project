@@ -3,46 +3,29 @@ import {
   getCartById,
   getProducts,
   getProductsLogged,
+  realTimeProducts,
+  chat,
+  signup,
+  login,
+  logout,
+  failregister,
+  profile,
 } from "../controllers/viewController.js";
-import publicRoutes from "../middleware/publicRoutes.js";
-import privateRoutes from "../middleware/privateRoutes.js";
+import publicRoutes from "../middlewares/publicRoutes.js";
+import privateRoutes from "../middlewares/privateRoutes.js";
+import userRoutes from "../middlewares/userRoutes.js";
 
 const router = Router();
 
 router.get("/", getProducts);
-
 router.get("/products", getProductsLogged);
-
 router.get("/cart/:cId", getCartById);
-
-router.get("/realtimeproducts", async (req, res) => {
-  res.render("realTimeProducts", {});
-});
-
-router.get("/chat", async (req, res) => {
-  res.render("chat", {});
-});
-
-router.get("/signup", publicRoutes, async (req, res) => {
-  res.render("signup");
-});
-
-router.get("/login", publicRoutes, async (req, res) => {
-  res.render("login");
-});
-
-router.get("/logout", (req, res) => {
-  req.session.destroy();
-  res.redirect("/login");
-});
-
-router.get("/failregister", (req, res) => {
-  res.send("Fallo de registro");
-});
-
-router.get("/profile", privateRoutes, async (req, res) => {
-  const { first_name, last_name, email, age, role, cart } = req.session;
-  res.render("profile", { first_name, last_name, email, age, role, cart });
-});
+router.get("/realtimeproducts", userRoutes, realTimeProducts);
+router.get("/chat", userRoutes, chat);
+router.get("/signup", publicRoutes, signup);
+router.get("/login", publicRoutes, login);
+router.get("/logout", logout);
+router.get("/failregister", failregister);
+router.get("/profile", privateRoutes, profile);
 
 export default router;

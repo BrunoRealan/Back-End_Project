@@ -1,13 +1,13 @@
-import { messageModel } from "./models/messageModel.js"
-
+import { ChatRepository } from "../../repositories/chatRepository.js";
+const chatRepository = new ChatRepository();
 export default class ChatManager {
-    async getChat (){
-        const chat = await messageModel.find();
-        return chat;
-    }
+  getChat = async () => {
+    const chat = await chatRepository.get();
+    return chat;
+  };
 
-    async addMessage(message){
-        const newMessage = await messageModel.create(message);
-        return newMessage;
-    }
+  addMessage = async (message) => {
+    const newMessage = await chatRepository.add(message);
+    return newMessage;
+  };
 }

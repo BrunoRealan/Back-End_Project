@@ -5,8 +5,7 @@ const buttonsArray = Array.from(addToCartButtons);
 buttonsArray.forEach((button) => {
   button.addEventListener("click", () => {
     const productId = button.dataset.productId;
-    const cartId =  button.dataset.cartId;/* "650b5c8f9c8bbdd684877a34" */ //HARDCODE
-
+    const cartId =  button.dataset.cartId;
     // Realiza la solicitud POST
     fetch(`http://localhost:8080/api/carts/${cartId}/products/${productId}`, {
       method: "POST",

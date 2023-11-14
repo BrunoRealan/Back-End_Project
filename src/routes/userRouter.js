@@ -22,7 +22,7 @@ router.post(
 
 router.get(
   "/github",
-  passport.authenticate("github", { scope: ["user.email"] })
+  passport.authenticate("github", { scope: ["user.email"] }),
 );
 
 router.get(

@@ -65,7 +65,7 @@ const environment = async () => {
 
     socketServer.on("connection", async (socket) => {
       console.log(`Nuevo cliente conectado de Id: ${socket.id}`);
-      socketServer.emit("updateProducts", await productManager.getProducts());
+      socketServer.emit("updateProducts", await productManager.getProductsAll());
       socket.on("message", async (data) => {
         await chatManager.addMessage(data);
         socketServer.emit("updateChat", await chatManager.getChat());

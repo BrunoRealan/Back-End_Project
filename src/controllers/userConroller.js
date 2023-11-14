@@ -78,7 +78,8 @@ export const gitHubCallBack = (req, res) => {
   req.session.email = req.user.email;
   req.session.age = req.user.age;
   req.session.cart = req.user.cart;
-  req.session.role = req.session.role;
+  req.session.role = req.user.role;
   req.session.isLogged = true;
+  console.log(req.session.role, req.session.age);
   res.redirect("/profile");
 };

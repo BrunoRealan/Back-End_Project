@@ -5,9 +5,14 @@ import GithubStrategy from "passport-github2";
 import bcrypt from "bcrypt";
 import { userModel } from "../dao/database/models/userModel.js";
 import { cartModel } from "../dao/database/models/cartModel.js";
+import { UserRepository } from "../repositories/userRepository.js";
+import { CartRepository } from "../repositories/cartRepository.js";
 
 dotenv.config();
 const LocalStrategy = local.Strategy;
+const userRepository = new UserRepository();
+const cartRepository = new CartRepository();
+
 const initializePassort = () => {
   passport.use(
     "register",
@@ -16,12 +21,12 @@ const initializePassort = () => {
       async (req, username, password, done) => {
         try {
           const { first_name, last_name, age } = req.body;
-          const userExists = await userModel.findOne({ username });
+          const userExists = await userRepository.get(username);
 
           if (userExists) {
             return done(null, false);
           }
-          const cart = await cartModel.create({});
+          const cart = await cartRepository.create();
 
           const user = await userModel.create({
             first_name,
@@ -84,7 +89,6 @@ const initializePassort = () => {
           console.log(profile, "profile");
           const email = profile.emails[0].value;
           const user = await userModel.findOne({ email });
-          console.log(user, "user");
           if (!user) {
             const newCart = await cartModel.create({});
 

@@ -1,5 +1,6 @@
 <h1>Bienvenido {{first_name}} {{last_name}} a la tienda BackEnd</h1>
 <h3>Estos son los siguientes productos:</h3>
+<h3>{{role}}</h3>
 
 {{#each response.payload}}
   <p>Nombre: {{title}}</p>
@@ -9,7 +10,11 @@
   <p>Status: {{status}}</p>
   <p>Stock: {{stock}}</p>
   <p>Categoría: {{category}}</p>
-  <button class="addToCartButton" data-product-id="{{_id}}" data-cart-id="{{cart}}">Agregar al Carrito</button>
+  <button
+    class="addToCartButton"
+    data-product-id="{{_id}}"
+    data-cart-id="{{cart}}"
+  >Agregar al Carrito</button>
   <br />
   <br />
   <br />

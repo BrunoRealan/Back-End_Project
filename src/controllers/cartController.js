@@ -75,7 +75,7 @@ export const modifyQuantityInCart = async (req, res) => {
 };
 
 //revisar
-export const deleteProductCart = async (req, res) => {
+export const deleteProductInCart = async (req, res) => {
   try {
     const cartId = req.params.cId.trim();
     const productId = req.params.pId.trim();
@@ -83,25 +83,35 @@ export const deleteProductCart = async (req, res) => {
       cartId,
       productId
     );
-    res
-      .status(200)
-      .send({
-        status: "The product in cart was eliminated",
-        productCartDeleted,
-      });
+    res.status(200).send({
+      status: "The product in cart was eliminated",
+      productCartDeleted,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send();
   }
 };
 
-export const deleteCart = async (req, res) => {
+export const deleteInCart = async (req, res) => {
   try {
     const cartId = req.params.cId.trim();
     const cartDeleted = await cartManager.deleteCart(cartId);
     res
       .status(200)
       .send({ status: "The products in cart was eliminated", cartDeleted });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send();
+  }
+};
+
+export const purchase = async (req, res) => {
+  try {
+    const cartId = req.params.cId.trim();
+    const purchaser = req.session.email;
+    const newTicket = await cartManager.purchaseCart(cartId, purchaser);
+    res.status(200).send({ status: "success", ticket: newTicket });
   } catch (error) {
     console.log(error);
     res.status(500).send();

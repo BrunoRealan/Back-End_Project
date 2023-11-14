@@ -15,7 +15,6 @@ export const getProductsLogged = async (req, res) => {
     });
     //SETEO CART ID AL RESPONSE PARA LINK A CART
     response.payload.cart = cart;
-    console.log(response.payload);
 
     res.render("products", {
       response,
@@ -49,12 +48,85 @@ export const getCartById = async (req, res) => {
   try {
     const { first_name, last_name, email, age } = req.session;
     const cartId = req.params.cId.trim(); //trim() Elimina espacios en blanco al principio y al final de params
-    const response = await cartManager.getCartById(cartId);
-    console.log(response);
+    const cartDocument = await cartManager.getCartById(cartId);
+    const response = cartDocument.toObject(); //toObject() Retorna objeto palano para handlebars
 
-    res.render("cart", { response, first_name, last_name, email, age });
+    res.status(200).render("cart", {
+      response,
+      first_name,
+      last_name,
+      email,
+      age,
+    });
   } catch (error) {
     console.log(error);
     res.status(404).send();
+  }
+};
+
+export const realTimeProducts = async (req, res) => {
+  try {
+    res.status(200).render("realTimeProducts", {});
+  } catch (error) {
+    console.log(error);
+    res.status(404).send();
+  }
+};
+
+export const chat = async (req, res) => {
+  try {
+    res.status(200).render("chat", {});
+  } catch (error) {
+    console.log(error);
+    res.status(404).send();
+  }
+};
+
+export const signup = async (req, res) => {
+  try {
+    res.status(200).render("signup");
+  } catch (error) {
+    console.log(error);
+    res.status(505).send();
+  }
+};
+
+export const login = async (req, res) => {
+  try {
+    res.status(200).render("login");
+  } catch (error) {
+    console.log(error);
+    res.status(505).send();
+  }
+};
+
+export const logout = (req, res) => {
+  try {
+    req.session.destroy();
+    res.status(200).redirect("/login");
+  } catch (error) {
+    console.log(error);
+    res.status(505).send();
+  }
+};
+
+export const failregister = (req, res) => {
+  try {
+    res.status(200).send("Fallo de registro");
+  } catch (error) {
+    console.log(error);
+    res.status(505).send();
+  }
+};
+
+export const profile = async (req, res) => {
+  try {
+    const { first_name, last_name, email, age, role, cart } = req.session;
+    res
+      .status(200)
+      .render("profile", { first_name, last_name, email, age, role, cart });
+  } catch (error) {
+    console.log(error);
+    res.status(505).send();
   }
 };
