@@ -18,7 +18,7 @@ const router = Router();
 router.post("/", createCart);
 router.get("/", adminRoutes, getCarts);
 router.get("/:cId", getCartById);
-router.post("/:cId/products/:pId",  addToCart);
+router.post("/:cId/products/:pId", userRoutes, addToCart);
 router.put("/:cId", updateCart);
 router.put("/:cId/products/:pId", modifyQuantityInCart);
 router.delete("/:cId/products/:pId", deleteProductInCart);
