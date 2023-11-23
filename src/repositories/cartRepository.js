@@ -5,7 +5,7 @@ export class CartRepository {
     try {
       const newCart = await cartModel.create({});
       console.log(`Id del carrito es:${newCart._id}`);
-      return;
+      return newCart;
     } catch (error) {
       console.log(error);
     }

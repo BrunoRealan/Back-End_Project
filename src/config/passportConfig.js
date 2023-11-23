@@ -3,8 +3,6 @@ import local from "passport-local";
 import dotenv from "dotenv";
 import GithubStrategy from "passport-github2";
 import bcrypt from "bcrypt";
-import { userModel } from "../dao/database/models/userModel.js";
-import { cartModel } from "../dao/database/models/cartModel.js";
 import { UserRepository } from "../repositories/userRepository.js";
 import { CartRepository } from "../repositories/cartRepository.js";
 
@@ -28,7 +26,7 @@ const initializePassort = () => {
           }
           const cart = await cartRepository.create();
 
-          const user = await userModel.create({
+          const user = await userRepository.create({
             first_name,
             last_name,
             email: username,
@@ -37,7 +35,6 @@ const initializePassort = () => {
             cart: cart._id,
             role: "user",
           });
-
           return done(null, user);
         } catch (error) {
           return done(error);
@@ -45,11 +42,12 @@ const initializePassort = () => {
       }
     )
   );
+
   passport.serializeUser((user, done) => {
     done(null, user._id);
   });
   passport.deserializeUser(async (id, done) => {
-    const user = userModel.findById(id);
+    const user = userRepository.getById(id);
     done(null, user);
   });
 
@@ -59,7 +57,7 @@ const initializePassort = () => {
       { usernameField: "email" },
       async (username, password, done) => {
         try {
-          const user = await userModel.findOne({ email: username }).lean();
+          const user = await userRepository.get(username);
           if (!user) {
             return done(null, false);
           }
@@ -86,13 +84,13 @@ const initializePassort = () => {
       },
       async (accesTocken, refreshToken, profile, done) => {
         try {
-          console.log(profile, "profile");
+          //console.log(profile, "profile");
           const email = profile.emails[0].value;
-          const user = await userModel.findOne({ email });
+          const user = await userRepository.get(email);
           if (!user) {
-            const newCart = await cartModel.create({});
+            const newCart = await cartRepository.create();
 
-            const newUser = await userModel.create({
+            const newUser = await userRepository.create({
               first_name: profile._json.name,
               last_name: "",
               email,

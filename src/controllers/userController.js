@@ -1,5 +1,6 @@
 import { userModel } from "../dao/database/models/userModel.js";
 import bcrypt from "bcrypt";
+import CustomError from "../services/errors/CustomError.js";
 
 export const register = async (req, res) => {
   //ENTREGA ANTERIOR AHORA AUTENTIFICA POR PASSPORT

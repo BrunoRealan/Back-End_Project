@@ -11,8 +11,8 @@ const ticketRepository = new TicketReposiotory();
 export default class CartManger {
   createCart = async () => {
     try {
-      await cartRepository.create();
-      return;
+      const newCart = await cartRepository.create();
+      return newCart;
     } catch (error) {
       console.log(error);
     }

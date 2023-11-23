@@ -1,5 +1,5 @@
 import { ProductRepository } from "../../repositories/productRepository.js";
-import { productModel } from "./models/productModel.js";
+
 const productRepository = new ProductRepository();
 export default class ProductManager {
   getProducts = async (limit, query, sort, page) => {
@@ -58,14 +58,15 @@ export default class ProductManager {
 
   getProductById = async (id) => {
     const products = await productRepository.getById(id);
-    const productsDTO = products.map((p) => ({
-      title: p.title,
-      description: p.description,
-      price: p.price,
-      thumbnail: p.thumbnail,
-      stock: p.stock,
-      category: p.category,
-    }));
+    console.log(products);
+    const productsDTO = {
+      title: products.title,
+      description: products.description,
+      price: products.price,
+      thumbnail: products.thumbnail,
+      stock: products.stock,
+      category: products.category,
+    };
     return productsDTO;
   };
 

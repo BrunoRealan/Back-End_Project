@@ -31,7 +31,7 @@ export class ProductRepository {
 
   getById = async (id) => {
     try {
-      const product = await productModel.findOne({ _id: id });
+      const product = await productModel.findOne({ _id: id }).lean();
       return product;
     } catch (error) {
       console.log(error);

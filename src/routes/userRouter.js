@@ -4,7 +4,7 @@ import {
   register,
   login,
   gitHubCallBack,
-} from "../controllers/userConroller.js";
+} from "../controllers/userController.js";
 
 const router = Router();
 

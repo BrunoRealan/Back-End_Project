@@ -17,6 +17,9 @@ import userRoutes from "../middlewares/userRoutes.js";
 
 const router = Router();
 
+router.get("/test-error", (req, res) => {
+  throw new Error("Este es un error de prueba");
+});
 router.get("/", getProducts);
 router.get("/products", getProductsLogged);
 router.get("/cart/:cId", getCartById);
