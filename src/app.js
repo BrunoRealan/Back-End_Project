@@ -36,7 +36,6 @@ const environment = async () => {
     app.set("views", "./src/views");
     app.set("view engine", "handlebars");
 
-    app.use(asyncErrorHandler);
     app.use(express.static("./src/public"));
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
@@ -69,6 +68,8 @@ const environment = async () => {
     app.use("/api/products", productsRouter);
     app.use("/api/carts", cartsRouter);
     app.use("/", viewsRouter);
+    //Middleware de manejo de errores genérico (need fix)
+    app.use(asyncErrorHandler);
 
     socketServer.on("connection", async (socket) => {
       console.log(`Nuevo cliente conectado de Id: ${socket.id}`);

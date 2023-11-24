@@ -17,8 +17,13 @@ import userRoutes from "../middlewares/userRoutes.js";
 
 const router = Router();
 
-router.get("/test-error", (req, res) => {
-  throw new Error("Este es un error de prueba");
+router.get("/test-error", async (req, res, next) => {
+  try {
+    // Código que puede lanzar un error asincrónico
+    throw new Error("Este es un error de prueba");
+  } catch (error) {
+    next(error); // Pasa el error al siguiente middleware (asyncErrorHandler)
+  }
 });
 router.get("/", getProducts);
 router.get("/products", getProductsLogged);
