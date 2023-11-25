@@ -69,7 +69,6 @@ export const login = async (req, res) => {
   req.session.cart = req.user.cart;
   req.session.role = req.user.role;
   req.session.isLogged = true;
-  console.log(req.session);
   return res.redirect("/profile");
 };
 
@@ -81,6 +80,5 @@ export const gitHubCallBack = (req, res) => {
   req.session.cart = req.user.cart;
   req.session.role = req.user.role;
   req.session.isLogged = true;
-  console.log(req.session.role, req.session.age);
   res.redirect("/profile");
 };

@@ -1,4 +1,5 @@
 import ProductManager from "../dao/database/ProductManager.js";
+import logger from "../services/logger.js";
 
 const productManager = new ProductManager();
 
@@ -8,7 +9,7 @@ export const getProducts = async (req, res) => {
     const response = await productManager.getProducts(limit, query, sort, page);
     res.status(200).send({ status: "success", response });
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(404).send();
   }
 };
@@ -22,7 +23,7 @@ export const getProductById = async (req, res) => {
     }
     res.status(200).send(product);
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(404).send();
   }
 };
@@ -34,7 +35,7 @@ export const addProduct = async (req, res) => {
     req.context.socketServer.emit("updateProducts", products);
     res.status(200).send();
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).send();
   }
 };
@@ -73,7 +74,7 @@ export const updateProduct = async (req, res) => {
     req.context.socketServer.emit("updateProducts", products);
     res.status(200).send();
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).send();
   }
 };
@@ -86,13 +87,12 @@ export const deleteProduct = async (req, res) => {
     if (productFound === undefined) {
       res.status(400).send();
     }
-    console.log(productFound);
     await productManager.deleteProduct(productId);
     const products = await productManager.getProducts();
     req.context.socketServer.emit("updateProducts", products);
     res.status(200).send();
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).send();
   }
 };

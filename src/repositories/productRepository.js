@@ -1,9 +1,14 @@
 import { productModel } from "../dao/database/models/productModel.js";
+import logger from "../services/logger.js";
 
 export class ProductRepository {
   create = async (product) => {
-    const createdProduct = await productModel.create(product);
-    return createdProduct;
+    try {
+      const createdProduct = await productModel.create(product);
+      return createdProduct;
+    } catch (error) {
+      logger.error(error);
+    }
   };
 
   get = async (modelLimit, modelQuery, modelSort, modelPage) => {
@@ -16,7 +21,7 @@ export class ProductRepository {
       });
       return products;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   };
 
@@ -25,7 +30,7 @@ export class ProductRepository {
       const products = await productModel.find({});
       return products;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   };
 
@@ -34,7 +39,7 @@ export class ProductRepository {
       const product = await productModel.findOne({ _id: id }).lean();
       return product;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   };
 
@@ -55,7 +60,7 @@ export class ProductRepository {
         { title, description, code, price, status, stock, category, thumbnail }
       );
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   };
 
@@ -64,7 +69,7 @@ export class ProductRepository {
       const productToDelete = await productModel.findOneAndDelete({ _id: id });
       return productToDelete;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   };
 }

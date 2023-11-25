@@ -1,5 +1,6 @@
 import fs from "fs";
 import ProductManager from "./ProductManager.js";
+import logger from "../../services/logger.js";
 
 const cartsFile = "./src/fs_files/carts.json";
 const productManager = new ProductManager();
@@ -31,9 +32,9 @@ class CartManager {
       };
       this.carts.push(newCart);
       await this.saveCarts();
-      console.log("Carrito creado satisfactoriamente");
+      logger.info("Carrito creado satisfactoriamente");
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   }
 
@@ -44,7 +45,7 @@ class CartManager {
         JSON.stringify(this.carts, null, 2)
       );
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   }
 
@@ -60,7 +61,7 @@ class CartManager {
         };
       }
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   }
 
@@ -69,12 +70,12 @@ class CartManager {
       const carts = await this.getCarts();
       const cartFound = carts.find((c) => c.id === id);
       if (!cartFound) {
-        console.log(`El carrito con ID "${id}" no existe`);
+        logger.info(`El carrito con ID "${id}" no existe`);
         return undefined;
       }
       return cartFound;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   }
 
@@ -83,12 +84,12 @@ class CartManager {
       await this.initialize();
       const product = await productManager.getProductById(productId);
       if (!product) {
-        console.log(`No existe el producto "${productId}"`);
+        logger.warning(`No existe el producto "${productId}"`);
         return;
       }
       const cartIndex = this.carts.findIndex((cart) => cart.id === cartId);
       if (cartIndex === -1) {
-        console.log(`No existe el carrito "${cartId}"`);
+        logger.warning(`No existe el carrito "${cartId}"`);
         return;
       }
       const cart = this.carts[cartIndex];
@@ -104,7 +105,7 @@ class CartManager {
       }
       await this.saveCarts();
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   }
 }

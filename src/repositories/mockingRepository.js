@@ -1,4 +1,5 @@
 import { fakerES as faker } from "@faker-js/faker";
+import logger from "../services/logger.js";
 
 export class MockingRepository {
   get = async () => {
@@ -25,7 +26,7 @@ export class MockingRepository {
 
       return products;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   };
 }

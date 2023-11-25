@@ -1,4 +1,5 @@
 import fs from "fs";
+import logger from "../../services/logger";
 const productsFile = "./src/fs_files/products.json";
 
 class ProductManager {
@@ -28,7 +29,7 @@ class ProductManager {
         return [];
       }
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   }
 
@@ -39,7 +40,7 @@ class ProductManager {
         JSON.stringify(this.products, null, 2)
       );
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   }
 
@@ -64,7 +65,7 @@ class ProductManager {
       !stock ||
       !category
     ) {
-      console.log("Falta algun campo");
+      logger.warning("Falta algun campo");
       return false;
     }
     if (
@@ -77,7 +78,7 @@ class ProductManager {
       typeof category !== "string" ||
       !Array.isArray(thumbnail)
     ) {
-      console.log("Asegurate que los campos tienen valores válidos");
+      logger.warning("Asegurate que los campos tienen valores válidos");
       return false;
     }
     return true;
@@ -90,11 +91,11 @@ class ProductManager {
         return;
       }
       if (this.products.some((p) => p.code === product.code)) {
-        console.log(`Ya existe un producto de código "${product.code}"`);
+        logger.warning(`Ya existe un producto de código "${product.code}"`);
         return;
       }
       if (this.products.some((p) => p.id === ProductManager.id)) {
-        console.log(`Ya existe un producto de ID "${ProductManager.id}"`);
+        logger.warning(`Ya existe un producto de ID "${ProductManager.id}"`);
         return;
       }
       const newProduct = {
@@ -104,9 +105,9 @@ class ProductManager {
       };
       this.products.push(newProduct);
       await this.saveProducts();
-      console.log("El producto se agregó correctamente");
+      logger.info("El producto se agregó correctamente");
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   }
 
@@ -115,14 +116,14 @@ class ProductManager {
       const products = await this.getProducts();
       const found = products.find((p) => p.id === id);
       if (!found) {
-        console.log(
+        logger.warning(
           `No se encontró un producto de ID "${id}" en la lista de productos`
         );
         return undefined;
       }
       return found;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   }
 
@@ -170,14 +171,14 @@ class ProductManager {
       if (index !== -1) {
         this.products[index] = productToUpdate;
         await this.saveProducts();
-        console.log("El producto se actualizó correctamente");
+        logger.info("El producto se actualizó correctamente");
       } else {
-        console.log(
+        logger.warning(
           `No se encontró el producto con ID "${id}" en la lista de productos`
         );
       }
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   }
 
@@ -192,9 +193,9 @@ class ProductManager {
       );
       this.products.splice(productIndex, 1);
       await this.saveProducts();
-      console.log("El producto se eliminó correctamente");
+      logger.info("El producto se eliminó correctamente");
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   }
 }

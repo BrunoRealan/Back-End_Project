@@ -6,6 +6,7 @@ import session from "express-session";
 import { Server } from "socket.io";
 import http from "http";
 import dotenv from "dotenv";
+import loggerTestRouter from "./routes/loggerTestRouter.js"
 import mockingRouter from "./routes/mockingRouter.js";
 import userRouter from "./routes/userRouter.js";
 import chatRouter from "./routes/chatRouter.js";
@@ -19,6 +20,7 @@ import passport from "passport";
 import compression from "express-compression";
 import initializePassort from "./config/passportConfig.js";
 import { asyncErrorHandler } from "./middlewares/errors/asyncErrorHandler.js";
+import logger from "./services/logger.js";
 
 const environment = async () => {
   try {
@@ -61,6 +63,8 @@ const environment = async () => {
       next();
     });
 
+    app.use(asyncErrorHandler);
+    app.use("/loggerTest", loggerTestRouter)
     app.use("/mockingproducts", mockingRouter);
     app.use("/api", userRouter);
     app.use("/chat", chatRouter);
@@ -68,11 +72,9 @@ const environment = async () => {
     app.use("/api/products", productsRouter);
     app.use("/api/carts", cartsRouter);
     app.use("/", viewsRouter);
-    //Middleware de manejo de errores genérico (need fix)
-    app.use(asyncErrorHandler);
 
     socketServer.on("connection", async (socket) => {
-      console.log(`Nuevo cliente conectado de Id: ${socket.id}`);
+      logger.http(`Nuevo cliente conectado de Id: ${socket.id}`);
       socketServer.emit(
         "updateProducts",
         await productManager.getProductsAll()
@@ -85,10 +87,10 @@ const environment = async () => {
 
     const PORT = process.env.PORT || 3000;
     httpServer.listen(PORT, () => {
-      console.log(`HTTP server and WebSocket listening to ${PORT}`);
+      logger.http(`HTTP server and WebSocket listening to ${PORT}`);
     });
   } catch (error) {
-    console.log(error, "Error de conección");
+    logger.error(error, "Error de conección");
   }
 };
 environment();

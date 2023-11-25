@@ -1,4 +1,5 @@
 import { ProductRepository } from "../../repositories/productRepository.js";
+import logger from "../../services/logger.js";
 
 const productRepository = new ProductRepository();
 export default class ProductManager {
@@ -38,7 +39,7 @@ export default class ProductManager {
       };
       return productsDTO;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   };
 
@@ -58,7 +59,6 @@ export default class ProductManager {
 
   getProductById = async (id) => {
     const products = await productRepository.getById(id);
-    console.log(products);
     const productsDTO = {
       title: products.title,
       description: products.description,
@@ -73,16 +73,11 @@ export default class ProductManager {
   addProduct = async (product) => {
     const products = await productRepository.getAll();
     if (products.some((p) => p.code === product.code)) {
-      console.log(`Ya existe un producto de código "${product.code}"`);
+      logger.warning(`Ya existe un producto de código "${product.code}"`);
       return;
     }
-    //MONGO OBJECT ID DOESN'T REPEAT, USED FOR FS ONLY
-    /* if (products.some((p) => p._id === product._id)) {
-      console.log(`Ya existe un producto de ID "${product._id}"`);
-      return;
-    } */
     const createdProduct = await productRepository.create(product);
-    console.log(
+    logger.info(
       `El producto de ID:"${createdProduct._id}" se agregó correctamente a la DB`
     );
   };
@@ -107,7 +102,7 @@ export default class ProductManager {
       !stock ||
       !category
     ) {
-      console.log("Falta algun campo");
+      logger.warning("Falta algun campo");
       return;
     }
     if (
@@ -120,7 +115,7 @@ export default class ProductManager {
       typeof category !== "string" ||
       !Array.isArray(thumbnail)
     ) {
-      console.log("Asegurate que los campos tienen valores válidos");
+      logger.warning("Asegurate que los campos tienen valores válidos");
       return;
     }
     await productRepository.update(
@@ -134,7 +129,7 @@ export default class ProductManager {
       category,
       thumbnail
     );
-    console.log("El producto ha sido actualizado correctamente");
+    logger.info("El producto ha sido actualizado correctamente");
   };
 
   deleteProduct = async (id) => {
@@ -142,10 +137,10 @@ export default class ProductManager {
       const productToDelete = await productRepository.delete(id);
 
       productToDelete
-        ? console.log(`El producto de Id ${id} ha sido borrado de la DB`)
-        : console.log("El producto no existe o ya ha sido borrado");
+        ? logger.info(`El producto de Id ${id} ha sido borrado de la DB`)
+        : logger.warning("El producto no existe o ya ha sido borrado");
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   };
 }

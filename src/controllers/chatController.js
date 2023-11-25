@@ -1,4 +1,5 @@
 import ChatManager from "../dao/database/ChatManager.js";
+import logger from "../services/logger.js";
 
 const chatManager = new ChatManager();
 
@@ -9,7 +10,7 @@ export const getChat = async (req, res) => {
     req.context.socketServer.emit("message", chats);
     res.status(200).send();
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).send();
   }
 };

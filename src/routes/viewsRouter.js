@@ -14,6 +14,7 @@ import {
 import publicRoutes from "../middlewares/publicRoutes.js";
 import privateRoutes from "../middlewares/privateRoutes.js";
 import userRoutes from "../middlewares/userRoutes.js";
+import logger from "../services/logger.js";
 
 const router = Router();
 
@@ -22,6 +23,7 @@ router.get("/test-error", async (req, res, next) => {
     // Código que puede lanzar un error asincrónico
     throw new Error("Este es un error de prueba");
   } catch (error) {
+    logger.error(error.message);
     next(error); // Pasa el error al siguiente middleware (asyncErrorHandler)
   }
 });

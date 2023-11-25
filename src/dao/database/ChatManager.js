@@ -1,13 +1,22 @@
 import { ChatRepository } from "../../repositories/chatRepository.js";
+import logger from "../../services/logger.js";
 const chatRepository = new ChatRepository();
 export default class ChatManager {
   getChat = async () => {
-    const chat = await chatRepository.get();
-    return chat;
+    try {
+      const chat = await chatRepository.get();
+      return chat;
+    } catch (error) {
+      logger.error(error);
+    }
   };
 
   addMessage = async (message) => {
-    const newMessage = await chatRepository.add(message);
-    return newMessage;
+    try {
+      const newMessage = await chatRepository.add(message);
+      return newMessage;
+    } catch (error) {
+      logger.error(error);
+    }
   };
 }

@@ -1,4 +1,5 @@
 import { transporter } from "../dao/database/MailManager.js";
+import logger from "../services/logger.js";
 
 export const sendMail = async (req, res) => {
   try {
@@ -11,8 +12,8 @@ export const sendMail = async (req, res) => {
     };
     transporter.sendMail(message);
     res.send("EMail Enviado");
-    console.log(message, "El Email fue enviado exitosamente");
+    logger.info(message, "El Email fue enviado exitosamente");
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 };

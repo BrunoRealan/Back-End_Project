@@ -1,4 +1,5 @@
 import { userModel } from "../dao/database/models/userModel.js";
+import logger from "../services/logger.js";
 
 export class UserRepository {
   create = async ({
@@ -10,25 +11,37 @@ export class UserRepository {
     cart,
     role,
   }) => {
-    const user = await userModel.create({
-      first_name,
-      last_name,
-      email,
-      age,
-      password,
-      cart,
-      role,
-    });
-    return user;
+    try {
+      const user = await userModel.create({
+        first_name,
+        last_name,
+        email,
+        age,
+        password,
+        cart,
+        role,
+      });
+      return user;
+    } catch (error) {
+      logger.error(error);
+    }
   };
 
   get = async (username) => {
-    const user = await userModel.findOne({ email: username });
-    return user;
+    try {
+      const user = await userModel.findOne({ email: username });
+      return user;
+    } catch (error) {
+      logger.error();
+    }
   };
 
   getById = async (id) => {
-    const user = await userModel.findById(id);
-    return user;
+    try {
+      const user = await userModel.findById(id);
+      return user;
+    } catch (error) {
+      logger.error(error);
+    }
   };
 }

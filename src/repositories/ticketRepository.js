@@ -1,4 +1,5 @@
 import { ticketModel } from "../dao/database/models/ticketModel.js";
+import logger from "../services/logger.js";
 
 export class TicketReposiotory {
   create = async (newCode, newAmount, newPurchaser) => {
@@ -10,7 +11,7 @@ export class TicketReposiotory {
       });
       return newTicket;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   };
 }

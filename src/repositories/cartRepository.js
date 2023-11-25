@@ -1,13 +1,14 @@
 import { cartModel } from "../dao/database/models/cartModel.js";
+import logger from "../services/logger.js";
 
 export class CartRepository {
   create = async () => {
     try {
       const newCart = await cartModel.create({});
-      console.log(`Id del carrito es:${newCart._id}`);
+      logger.info(`Id del carrito es:${newCart._id}`);
       return newCart;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   };
 
@@ -19,7 +20,7 @@ export class CartRepository {
       };
       return carts;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   };
 
@@ -30,7 +31,7 @@ export class CartRepository {
         .populate({ path: "products.product", model: "products" });
       return cart;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   };
 
@@ -39,7 +40,7 @@ export class CartRepository {
       await cartModel.updateOne({ _id: id }, { products: productsToUpdate });
       return;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   };
 
@@ -51,7 +52,7 @@ export class CartRepository {
       );
       return result;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   };
 
@@ -63,7 +64,7 @@ export class CartRepository {
       );
       return result;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   };
 }

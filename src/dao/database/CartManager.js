@@ -3,6 +3,7 @@ import { ProductRepository } from "../../repositories/productRepository.js";
 import { TicketReposiotory } from "../../repositories/ticketRepository.js";
 import crypto from "crypto";
 import mongoose from "mongoose";
+import logger from "../../services/logger.js";
 
 const cartRepository = new CartRepository();
 const productRepository = new ProductRepository();
@@ -14,7 +15,7 @@ export default class CartManger {
       const newCart = await cartRepository.create();
       return newCart;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   };
 
@@ -23,7 +24,7 @@ export default class CartManger {
       const carts = await cartRepository.getAll();
       return carts;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   };
 
@@ -31,10 +32,10 @@ export default class CartManger {
     try {
       const cart = await cartRepository.getById(id);
       return cart === null
-        ? console.log("No existe el carrito seleccionado")
+        ? logger.warning("No existe el carrito seleccionado")
         : cart;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   };
 
@@ -44,13 +45,13 @@ export default class CartManger {
       const productIdObject = new mongoose.Types.ObjectId(productId);
       const product = await productRepository.getById(productId);
       if (!product) {
-        console.log(`No existe el producto "${productId}"`);
+        logger.warning(`No existe el producto "${productId}"`);
         return;
       }
       // Verificar si existe un carrito con el cartId proporcionado
       const cart = await cartRepository.getById(cartId);
       if (!cart) {
-        console.log(`El carrito de ID:${cartId} no existe`);
+        logger.warning(`El carrito de ID:${cartId} no existe`);
         return;
       }
       // Si el carrito ya existe, verificar si el producto con productId ya está en el carrito
@@ -61,22 +62,22 @@ export default class CartManger {
       // Si el producto no existe en el carrito y hay Stock agregarlo con cantidad 1, y si existe, que no supere Stock
       if (!existingProduct && product.stock !== 0) {
         cart.products.push({ product: productIdObject, quantity: 1 });
-        console.log("Se agrego un producto al carrito");
+        logger.info("Se agrego un producto al carrito");
       } else if (existingProduct) {
         if (existingProduct.quantity >= product.stock) {
-          console.log("No puedes agregar el producto por falta de Stock");
+          logger.warning("No puedes agregar el producto por falta de Stock");
           return;
         } else {
           existingProduct.quantity++;
-          console.log("Agregaste un producto más a los que tenías");
+          logger.info("Agregaste un producto más a los que ya tenías");
         }
       } else {
-        console.log("No puedes agregar un producto con stock 0");
+        logger.warning("No puedes agregar un producto con stock 0");
       }
       await cart.save();
       return;
     } catch (error) {
-      console.error("Error al agregar producto al carrito:", error);
+      logger.error("Error al agregar producto al carrito:", error);
     }
   };
 
@@ -85,7 +86,7 @@ export default class CartManger {
       await cartRepository.update(id, productsToUpdate);
       return;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   };
 
@@ -93,20 +94,20 @@ export default class CartManger {
     try {
       const cart = await cartRepository.getById(cartId);
       if (!cart) {
-        return res.status(404).send("El carrito no existe");
+        logger.warning("El carrito no existe");
       }
 
       const productToUpdate = cart.products.find((item) =>
         item.product.equals(productId)
       );
       if (!productToUpdate) {
-        res.status(404).send("El producto no existe en el carrito");
+        logger.warning("El producto no existe en el carrito");
       }
       productToUpdate.quantity = quantity;
       await cart.save();
       return;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   };
 
@@ -115,12 +116,11 @@ export default class CartManger {
       const result = await cartRepository.delete(cartId, productId);
 
       if (result.modifiedCount === 0) {
-        return console.log("El producto no se encontró en el carrito.");
+        return logger.warning("El producto no se encontró en el carrito.");
       }
-      return console.log("El producto ha sido eliminado del carrito.");
+      return logger.info("El producto ha sido eliminado del carrito.");
     } catch (error) {
-      console.error(error);
-      res.status(500).send();
+      logger.error(error);
     }
   };
 
@@ -129,12 +129,13 @@ export default class CartManger {
       const result = await cartRepository.deleteAll(id);
 
       if (result.modifiedCount === 0) {
-        return console.log("Los productos no se han encontrado en el carrito.");
+        return logger.warning(
+          "Los productos no se han encontrado en el carrito."
+        );
       }
-      console.log("Los productos han sido eliminados del carrito.");
+      logger.info("Los productos han sido eliminados del carrito.");
     } catch (error) {
-      console.error(error);
-      res.status(500).send();
+      logger.error(error);
     }
   };
 
@@ -142,21 +143,18 @@ export default class CartManger {
     try {
       const cart = await cartRepository.getById(id);
       const productsCart = cart.products;
-      console.log(cart, "cart");
-      console.log(productsCart, "productsCart");
       let productsPurchased = [];
       let productsNotPurchased = [];
       let amount = 0;
 
       if (productsCart.length === 0) {
-        return console.log(
+        return logger.warning(
           "No puedes realizar la compra, ya que no tienes productos en el carrito."
         );
       }
 
       for (const item of productsCart) {
         const product = await productRepository.getById(item.product._id);
-        console.log(product.stock);
 
         if (item.quantity <= product.stock) {
           // Si hay suficiente stock, restar del stock y agregar al array de productos comprados
@@ -180,17 +178,14 @@ export default class CartManger {
       function generateUniqueCode() {
         return crypto.randomBytes(12).toString("hex");
       }
-      console.log(productsPurchased, "purcheased");
-      console.log(productsNotPurchased, "notPur");
-      console.log(amount);
       const code = generateUniqueCode();
       // Crear el ticket solo con los productos comprados
       const newTicket = await ticketRepository.create(code, amount, purchaser);
-      console.log(newTicket, "newTicket");
+      logger.info(newTicket, "newTicket");
 
       return { newTicket, productsNotPurchased };
     } catch (error) {
-      console.error(error);
+      logger.error(error);
     }
   };
 }

@@ -1,5 +1,6 @@
 import ProductManager from "../dao/database/ProductManager.js";
 import CartManger from "../dao/database/CartManager.js";
+import logger from "../services/logger.js";
 
 const productManager = new ProductManager();
 const cartManager = new CartManger();
@@ -25,7 +26,7 @@ export const getProductsLogged = async (req, res) => {
       role,
     });
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(404).send();
   }
 };
@@ -39,7 +40,7 @@ export const getProducts = async (req, res) => {
       response,
     });
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(404).send();
   }
 };
@@ -59,7 +60,7 @@ export const getCartById = async (req, res) => {
       age,
     });
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(404).send();
   }
 };
@@ -68,7 +69,7 @@ export const realTimeProducts = async (req, res) => {
   try {
     res.status(200).render("realTimeProducts", {});
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(404).send();
   }
 };
@@ -77,7 +78,7 @@ export const chat = async (req, res) => {
   try {
     res.status(200).render("chat", {});
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(404).send();
   }
 };
@@ -86,7 +87,7 @@ export const signup = async (req, res) => {
   try {
     res.status(200).render("signup");
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(505).send();
   }
 };
@@ -95,7 +96,7 @@ export const login = async (req, res) => {
   try {
     res.status(200).render("login");
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(505).send();
   }
 };
@@ -105,7 +106,7 @@ export const logout = (req, res) => {
     req.session.destroy();
     res.status(200).redirect("/login");
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(505).send();
   }
 };
@@ -114,7 +115,7 @@ export const failregister = (req, res) => {
   try {
     res.status(200).send("Fallo de registro");
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(505).send();
   }
 };
@@ -126,7 +127,7 @@ export const profile = async (req, res) => {
       .status(200)
       .render("profile", { first_name, last_name, email, age, role, cart });
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(505).send();
   }
 };
