@@ -4,6 +4,7 @@ import {
   register,
   login,
   gitHubCallBack,
+  resetPassword,
 } from "../controllers/userController.js";
 
 const router = Router();
@@ -20,9 +21,11 @@ router.post(
   login
 );
 
+router.post("/resetPassword/:uId", resetPassword);
+
 router.get(
   "/github",
-  passport.authenticate("github", { scope: ["user.email"] }),
+  passport.authenticate("github", { scope: ["user.email"] })
 );
 
 router.get(

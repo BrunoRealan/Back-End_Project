@@ -111,6 +111,25 @@ export const logout = (req, res) => {
   }
 };
 
+export const sendResetPassword = async (req, res) => {
+  try {
+    res.status(200).render("sendResetPassword", {});
+  } catch (error) {
+    logger.error(error);
+    res.status(505).send();
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const userId = req.params.uId;
+    res.status(200).render("resetPassword", { userId });
+  } catch (error) {
+    logger.error(error);
+    res.status(505).send();
+  }
+};
+
 export const failregister = (req, res) => {
   try {
     res.status(200).send("Fallo de registro");

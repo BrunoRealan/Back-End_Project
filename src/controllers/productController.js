@@ -28,9 +28,38 @@ export const getProductById = async (req, res) => {
   }
 };
 
+//FIX NEEDED
 export const addProduct = async (req, res) => {
   try {
-    await productManager.addProduct(req.body);
+    const {
+      title,
+      description,
+      price,
+      thumbnail,
+      code,
+      stock,
+      status,
+      category,
+      owner,
+    } = req.body;
+
+    if (req.session.role === "premium") {
+      owner = req.session.email;
+    } else {
+      owner = "admin";
+    }
+
+    await productManager.addProduct(
+      title,
+      description,
+      price,
+      thumbnail,
+      code,
+      stock,
+      status,
+      category,
+      owner
+    );
     const products = await productManager.getProducts();
     req.context.socketServer.emit("updateProducts", products);
     res.status(200).send();
@@ -40,6 +69,7 @@ export const addProduct = async (req, res) => {
   }
 };
 
+//FIX NEEDED
 export const updateProduct = async (req, res) => {
   try {
     //const productId = parseInt(req.params.pid, 10);

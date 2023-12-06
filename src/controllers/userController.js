@@ -1,6 +1,8 @@
-import { userModel } from "../dao/database/models/userModel.js";
 import bcrypt from "bcrypt";
-import CustomError from "../services/errors/CustomError.js";
+import { UserRepository } from "../repositories/userRepository.js";
+import logger from "../services/logger.js";
+
+const userRepository = new UserRepository();
 
 export const register = async (req, res) => {
   //ENTREGA ANTERIOR AHORA AUTENTIFICA POR PASSPORT
@@ -81,4 +83,21 @@ export const gitHubCallBack = (req, res) => {
   req.session.role = req.user.role;
   req.session.isLogged = true;
   res.redirect("/profile");
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const userId = req.params.uId;
+    const { password } = req.body;
+    const userPassUpdate = await userRepository.updatePass(userId, password);
+    logger.debug(userId);
+    logger.debug(userPassUpdate);
+    if (userPassUpdate === undefined) {
+      logger.warning("Error de cambio de contraseña");
+      return;
+    }
+    return res.redirect("/login");
+  } catch (error) {
+    logger.error(error);
+  }
 };

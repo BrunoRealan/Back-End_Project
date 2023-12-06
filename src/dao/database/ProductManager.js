@@ -70,13 +70,33 @@ export default class ProductManager {
     return productsDTO;
   };
 
-  addProduct = async (product) => {
+  addProduct = async (
+    title,
+    description,
+    price,
+    thumbnail,
+    code,
+    stock,
+    status,
+    category,
+    owner
+  ) => {
     const products = await productRepository.getAll();
-    if (products.some((p) => p.code === product.code)) {
-      logger.warning(`Ya existe un producto de código "${product.code}"`);
+    if (products.some((p) => p.code === code)) {
+      logger.warning(`Ya existe un producto de código "${code}"`);
       return;
     }
-    const createdProduct = await productRepository.create(product);
+    const createdProduct = await productRepository.create(
+      title,
+      description,
+      price,
+      thumbnail,
+      code,
+      stock,
+      status,
+      category,
+      owner
+    );
     logger.info(
       `El producto de ID:"${createdProduct._id}" se agregó correctamente a la DB`
     );
