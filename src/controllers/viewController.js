@@ -1,9 +1,13 @@
 import ProductManager from "../dao/database/ProductManager.js";
 import CartManger from "../dao/database/CartManager.js";
+import { RecoverRepository } from "../repositories/recoverRespository.js";
+import { UserRepository } from "../repositories/userRepository.js";
 import logger from "../services/logger.js";
 
 const productManager = new ProductManager();
 const cartManager = new CartManger();
+const recoverRepository = new RecoverRepository();
+const userRepository = new UserRepository();
 
 export const getProductsLogged = async (req, res) => {
   try {
@@ -122,11 +126,17 @@ export const sendResetPassword = async (req, res) => {
 
 export const resetPassword = async (req, res) => {
   try {
-    const userId = req.params.uId;
-    res.status(200).render("resetPassword", { userId });
+    const recoverId = req.params.rId;
+    const recover = await recoverRepository.getById(recoverId);
+    const actualDate = new Date();
+
+    if (recover.expire_at.getTime() <= actualDate.getTime()) {
+      logger.warning("Token expirado");
+      return res.send("Error,token expirado");
+    }
+    res.render("resetPassword", { recoverId });
   } catch (error) {
     logger.error(error);
-    res.status(505).send();
   }
 };
 

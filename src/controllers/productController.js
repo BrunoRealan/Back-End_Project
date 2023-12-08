@@ -89,17 +89,26 @@ export const updateProduct = async (req, res) => {
     if (productFound === undefined) {
       return res.status(400).send();
     }
-    await productManager.updateProduct(
-      productId,
-      title,
-      description,
-      code,
-      price,
-      status,
-      stock,
-      category,
-      thumbnail
-    );
+    if (req.session.role === "admin") {
+      await productManager.updateProduct(
+        productId,
+        title,
+        description,
+        code,
+        price,
+        status,
+        stock,
+        category,
+        thumbnail
+      );
+    }
+    if (req.session.role === "premium") {
+      productFound.owner === req.session.email
+        ? await productManager.deleteProduct(productId)
+        : logger.warning("No puedes borrar un producto que no te pertenece"),
+        alert("No puedes borrar un producto que no te pertenece");
+    }
+
     const products = await productManager.getProductsAll();
     req.context.socketServer.emit("updateProducts", products);
     res.status(200).send();
@@ -115,9 +124,19 @@ export const deleteProduct = async (req, res) => {
     const productId = req.params.pid;
     const productFound = await productManager.getProductById(productId);
     if (productFound === undefined) {
+      logger.warning("No existe el producto que quieres borrar");
       res.status(400).send();
     }
-    await productManager.deleteProduct(productId);
+    if (req.session.role === "admin") {
+      await productManager.deleteProduct(productId);
+    }
+    if (req.session.role === "premium") {
+      productFound.owner === req.session.email
+        ? await productManager.deleteProduct(productId)
+        : logger.warning("No puedes borrar un producto que no te pertenece"),
+        alert("No puedes borrar un producto que no te pertenece");
+    }
+
     const products = await productManager.getProducts();
     req.context.socketServer.emit("updateProducts", products);
     res.status(200).send();

@@ -5,6 +5,7 @@ import {
   login,
   gitHubCallBack,
   resetPassword,
+  changeUserToPremium,
 } from "../controllers/userController.js";
 
 const router = Router();
@@ -21,8 +22,6 @@ router.post(
   login
 );
 
-router.post("/resetPassword/:uId", resetPassword);
-
 router.get(
   "/github",
   passport.authenticate("github", { scope: ["user.email"] })
@@ -33,5 +32,9 @@ router.get(
   passport.authenticate("github", { failureRedirect: "/login" }),
   gitHubCallBack
 );
+
+router.post("/resetPassword/:rId", resetPassword);
+
+router.get("/users/premium/:uId", changeUserToPremium);
 
 export default router;

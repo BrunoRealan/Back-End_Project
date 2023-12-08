@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const ticketCollection = "tickets";
 
 const ticketSchema = new mongoose.Schema({
-code: {
+  code: {
     type: String,
     required: true,
     unique: true,
@@ -20,7 +20,7 @@ code: {
     type: String,
     required: true,
   },
-})
+});
 
 const ticketModel = mongoose.model(ticketCollection, ticketSchema);
 

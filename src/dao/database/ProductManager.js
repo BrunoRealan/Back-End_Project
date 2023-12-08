@@ -58,16 +58,17 @@ export default class ProductManager {
   };
 
   getProductById = async (id) => {
-    const products = await productRepository.getById(id);
-    const productsDTO = {
-      title: products.title,
-      description: products.description,
-      price: products.price,
-      thumbnail: products.thumbnail,
-      stock: products.stock,
-      category: products.category,
+    const product = await productRepository.getById(id);
+    const productDTO = {
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      thumbnail: product.thumbnail,
+      stock: product.stock,
+      category: product.category,
+      owner: product.owner,
     };
-    return productsDTO;
+    return productDTO;
   };
 
   addProduct = async (

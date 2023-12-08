@@ -52,27 +52,39 @@ export class UserRepository {
       if (user === undefined) {
         let warn = "No existe el usuario en el registro";
         logger.warning(warn);
-        alert(warn);
         return;
       }
       if (newPass === "") {
         let warn = "Debes escribir una contraseña para contnuar";
         logger.warning(warn);
-        alert(warn);
         return;
       }
       if (bcrypt.compareSync(newPass, user.password)) {
         let warn = "No puedes volver a usar una contraseña antigua";
         logger.warning(warn);
-        alert(warn);
         return;
       }
       user.password = bcrypt.hashSync(newPass, bcrypt.genSaltSync(10));
       await user.save();
-      alert("La contraseña fue cambiada satisfactoriamente");
+      logger.info("La contraseña fue cambiada satisfactoriamente");
 
       const userDTO = { user: user.first_name };
       return userDTO;
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
+  changeCredential = async (id) => {
+    try {
+      const user = await userModel.findById(id);
+      if (user.role === "user") {
+        user.role = "premium";
+        return user.save();
+      } else if (user.role === "premium") {
+        user.role = "user";
+        return user.save();
+      }
     } catch (error) {
       logger.error(error);
     }

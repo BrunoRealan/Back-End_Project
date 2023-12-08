@@ -1,7 +1,9 @@
 import CartManger from "../dao/database/CartManager.js";
+import ProductManager from "../dao/database/ProductManager.js";
 import logger from "../services/logger.js";
 
 const cartManager = new CartManger();
+const productManager = new ProductManager();
 
 export const createCart = async (req, res) => {
   try {
@@ -38,8 +40,19 @@ export const addToCart = async (req, res) => {
   try {
     const cartId = req.params.cId.trim();
     const productId = req.params.pId.trim();
-    const cartAdded = await cartManager.addToCart(cartId, productId);
-    res.status(200).send({ status: "success", cartAdded });
+    const product = await productManager.getProductById(productId);
+    if (product === undefined) {
+      logger.warning("No existe el producto que quieres agregar");
+      return res.status(400).send();
+    }
+    if (req.session.role === "premium") {
+      product.owner === req.session.email
+        ? alert("No puedes agregar tu propio producto a tu carrito")
+        : await cartManager.addToCart(cartId, productId);
+      return res.status(200).send({ status: "success" });
+    }
+    await cartManager.addToCart(cartId, productId);
+    res.status(200).send({ status: "success" });
   } catch (error) {
     logger.error(error);
     res.status(500).send();

@@ -38,7 +38,7 @@ router.get("/signup", publicRoutes, signup);
 router.get("/login", publicRoutes, login);
 router.get("/logout", logout);
 router.get("/sendResetPassword", sendResetPassword);
-router.get("/resetPassword/:uId",resetPassword)
+router.get("/resetPassword/:rId",resetPassword)
 router.get("/failregister", failregister);
 router.get("/profile", privateRoutes, profile);
 
