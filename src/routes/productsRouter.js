@@ -11,8 +11,8 @@ import adminRoutes from "../middlewares/adminRoutes.js";
 const router = Router();
 
 router.get("/", getProducts);
-router.get("/:pid", getProductById);
 router.post("/", adminRoutes, addProduct);
+router.get("/:pid", getProductById);
 router.put("/:pid", adminRoutes, updateProduct);
 router.delete("/:pid", adminRoutes, deleteProduct);
 

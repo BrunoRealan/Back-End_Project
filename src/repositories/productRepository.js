@@ -36,7 +36,7 @@ export class ProductRepository {
 
   getById = async (id) => {
     try {
-      const product = await productModel.findOne({ _id: id }).lean();
+      const product = await productModel.findOne({ _id: id });
       return product;
     } catch (error) {
       logger.error(error);
@@ -55,10 +55,11 @@ export class ProductRepository {
     thumbnail
   ) => {
     try {
-      await productModel.updateOne(
+      const productUpdated = await productModel.updateOne(
         { _id: id },
         { title, description, code, price, status, stock, category, thumbnail }
       );
+      return productUpdated;
     } catch (error) {
       logger.error(error);
     }
@@ -67,6 +68,7 @@ export class ProductRepository {
   delete = async (id) => {
     try {
       const productToDelete = await productModel.findOneAndDelete({ _id: id });
+      console.log(productToDelete);
       return productToDelete;
     } catch (error) {
       logger.error(error);

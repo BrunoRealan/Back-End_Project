@@ -1,4 +1,4 @@
-import ChatManager from "../dao/database/ChatManager.js";
+import ChatManager from "../managers/ChatManager.js";
 import logger from "../services/logger.js";
 
 const chatManager = new ChatManager();

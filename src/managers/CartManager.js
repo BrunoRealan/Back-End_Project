@@ -1,9 +1,9 @@
-import { CartRepository } from "../../repositories/cartRepository.js";
-import { ProductRepository } from "../../repositories/productRepository.js";
-import { TicketReposiotory } from "../../repositories/ticketRepository.js";
+import { CartRepository } from "../repositories/cartRepository.js";
+import { ProductRepository } from "../repositories/productRepository.js";
+import { TicketReposiotory } from "../repositories/ticketRepository.js";
 import crypto from "crypto";
 import mongoose from "mongoose";
-import logger from "../../services/logger.js";
+import logger from "../services/logger.js";
 
 const cartRepository = new CartRepository();
 const productRepository = new ProductRepository();

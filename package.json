@@ -6,13 +6,15 @@
   "type": "module",
   "scripts": {
     "start": "node ./src/app.js",
-    "dev": "nodemon ./src/app.js"
+    "dev": "nodemon ./src/app.js",
+    "build-css": "postcss ./src/public/css/styles.css -o ./src/public/css/output.css"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@faker-js/faker": "^8.3.1",
+    "autoprefixer": "^10.4.16",
     "bcrypt": "^5.1.1",
     "connect-mongo": "^5.0.0",
     "dotenv": "^16.3.1",
@@ -27,7 +29,12 @@
     "passport": "^0.6.0",
     "passport-github2": "^0.1.12",
     "passport-local": "^1.0.0",
+    "postcss": "^8.4.32",
+    "postcss-cli": "^11.0.0",
     "socket.io": "^4.7.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
+    "tailwindcss": "^3.3.6",
     "winston": "^3.11.0"
   }
 }

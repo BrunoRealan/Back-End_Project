@@ -1,0 +1,347 @@
+paths:
+  /api/products:
+    get:
+      tags:
+        - Products
+      summary: Get all products with pagination
+      description: Get all products with optional parameters for limit, query, sort, and page
+      operationId: getProducts
+      parameters:
+        - in: query
+          name: limit
+          required: false
+          description: Limit the number of products returned
+          schema:
+            type: integer
+        - in: query
+          name: query
+          required: false
+          description: Query for filtering products
+          schema:
+            type: string
+        - in: query
+          name: sort
+          required: false
+          description: Sort products by price in ascending (asc) or descending (desc) order
+          schema:
+            type: string
+        - in: query
+          name: page
+          required: false
+          description: Page number for pagination
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Products list successfully fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  payload:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Product"
+                  totalPages:
+                    type: integer
+                  prevPage:
+                    type: integer
+                  nextPage:
+                    type: integer
+                  page:
+                    type: integer
+                  hasPrevPage:
+                    type: boolean
+                  hasNextPage:
+                    type: boolean
+                  prevLink:
+                    type: string
+                  nextLink:
+                    type: string
+              example:
+                status: success
+                payload:
+                  - _id: "123456789123456789"
+                    title: "Teclado inalámbrico"
+                    description: "Teclado para pc gamer profesional"
+                    code: "123456789"
+                    price: 23.5
+                    status: true
+                    stock: 10
+                    category: "Supplies"
+                    thumbnail:
+                      - "http://localhost:8080/images/5f9b3b3b9d9d9d9d9d9d9d9d.jpg"
+                    owner: "Jacinto@gmail.com"
+                    id: "123456789123456789"
+                    __v: 0
+                totalPages: 10
+                prevPage: 1
+                nextPage: 3
+                page: 2
+                hasPrevPage: true
+                hasNextPage: true
+                prevLink: "http://localhost:8080/products/?page=1"
+                nextLink: "http://localhost:8080/products/?page=3"
+        "404":
+          description: No products found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: No products found
+    post:
+      tags:
+        - Products
+      summary: Create a new product
+      description: Create a new product
+      operationId: addProduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/ProductUpdate"
+      responses:
+        "200":
+          description: Product successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                
+              example:
+                title: "Teclado inalámbrico"
+                price: 99.99
+                thumbnail:
+                  ["http://localhost:8080/images/5f9b3b3b9d9d9d9d9d9d9d9d.jpg"]
+                stock: 10
+                category: "Supplies"
+                owner: "Jacinto@gmail.com"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: Bad request
+  /api/products/{pId}:
+    get:
+      tags:
+        - Products
+      summary: Get a product by ID
+      description: Get a product by ID
+      operationId: getProductById
+      parameters:
+        - in: path
+          name: pId
+          required: true
+          description: Product ID
+          schema:
+            type: string
+          example: "650f87514840d93aeccdc311"
+      responses:
+        "200":
+          description: Product successfully fetched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  $ref: "#/components/schemas/ProductDTO"
+              example:
+                title: "Teclado inalámbrico"
+                price: 25.99
+                thumbnail:
+                  ["http://localhost:8080/images/5f9b3b3b9d9d9d9d9d9d9d9d.jpg"]
+                stock: 10
+                category: "Supplies"
+                owner: "Jacinto@gmail.com"
+        "404":
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: Product not found
+    put:
+      tags:
+        - Products
+      summary: Update a product by ID
+      description: Update a product by ID
+      operationId: updateProduct
+      parameters:
+        - in: path
+          name: pId
+          required: true
+          description: Product ID
+          schema:
+            type: string
+          example: "650f87514840d93aeccdc311"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/ProductUpdate"
+      responses:
+        "200":
+          description: Product successfully updated
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: Product successfully updated
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: Internal server error
+    delete:
+      tags:
+        - Products
+      summary: Delete a product by ID
+      description: Delete a product by ID
+      operationId: deleteProduct
+      parameters:
+        - in: path
+          name: pId
+          required: true
+          description: Product ID
+          schema:
+            type: string
+          example: "650f87514840d93aeccdc311"
+      responses:
+        "200":
+          description: Product successfully deleted
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: Product successfully deleted
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: Internal server error
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: ObjectId
+          example: "650f87576450d93aeyydc330"
+        title:
+          type: string
+          example: "Teclado inalámbrico"
+        description:
+          type: string
+          example: "Teclado para pc gamer profesional"
+        code:
+          type: string
+          example: "123456789"
+        price:
+          type: number
+          example: 23.5
+        status:
+          type: boolean
+          example: true
+        stock:
+          type: number
+          example: 10
+        category:
+          type: string
+          example: "Supplies"
+        thumbnail:
+          type: array
+          items:
+            type: string
+          example: ["http://localhost:8080/images/5f9b3b3b9d9d9d9d9d9d9d9d.jpg"]
+        owner:
+          type: string
+          example: "Jacinto@gmail.com"
+        __v:
+          type: number
+          example: 0
+        id:
+          type: string
+          example: "650f87576450d93aeyydc330"
+    ProductDTO:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "Teclado inalámbrico"
+        price:
+          type: number
+          example: 99.99
+        thumbnail:
+          type: array
+          items:
+            type: string
+          example: ["http://localhost:8080/images/5f9b3b3b9d9d9d9d9d9d9d9d.jpg"]
+        stock:
+          type: number
+          example: 10
+        category:
+          type: string
+          example: "Supplies"
+        owner:
+          type: string
+          example: "Jacinto@gmail.com"
+  requestBodies:
+    ProductUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "Teclado inalámbrico"
+        description:
+          type: string
+          example: "Teclado para pc gamer profesional"
+        code:
+          type: string
+          example: "123456789"
+        price:
+          type: number
+          example: 23.5
+        status:
+          type: boolean
+          example: true
+        stock:
+          type: number
+          example: 10
+        category:
+          type: string
+          example: "Supplies"
+        thumbnail:
+          type: array
+          items:
+            type: string
+          example: ["http://localhost:8080/images/5f9b3b3b9d9d9d9d9d9d9d9d.jpg"]

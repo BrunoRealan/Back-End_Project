@@ -1,5 +1,5 @@
-import ProductManager from "../dao/database/ProductManager.js";
-import CartManger from "../dao/database/CartManager.js";
+import ProductManager from "../managers/ProductManager.js";
+import CartManger from "../managers/CartManager.js";
 import { RecoverRepository } from "../repositories/recoverRespository.js";
 import { UserRepository } from "../repositories/userRepository.js";
 import logger from "../services/logger.js";

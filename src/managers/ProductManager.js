@@ -1,5 +1,5 @@
-import { ProductRepository } from "../../repositories/productRepository.js";
-import logger from "../../services/logger.js";
+import { ProductRepository } from "../repositories/productRepository.js";
+import logger from "../services/logger.js";
 
 const productRepository = new ProductRepository();
 export default class ProductManager {
@@ -52,7 +52,7 @@ export default class ProductManager {
       thumbnail: p.thumbnail,
       stock: p.stock,
       category: p.category,
-      code: p.code,
+      owner: p.owner,
     }));
     return productsDTO;
   };
@@ -82,25 +82,41 @@ export default class ProductManager {
     category,
     owner
   ) => {
-    const products = await productRepository.getAll();
-    if (products.some((p) => p.code === code)) {
-      logger.warning(`Ya existe un producto de código "${code}"`);
-      return;
+    try {
+      const products = await productRepository.getAll();
+      if (products.some((p) => p.code === code)) {
+        logger.warning(`Ya existe un producto de código "${code}"`);
+        return;
+      }
+      const product = {};
+      product.title = title;
+      product.description = description;
+      product.price = price;
+      product.thumbnail = thumbnail;
+      product.code = code;
+      product.stock = stock;
+      product.status = status;
+      product.category = category;
+      product.owner = owner;
+
+      const createdProduct = await productRepository.create(product);
+
+      logger.info(
+        `El producto de ID:"${createdProduct._id}" se agregó correctamente a la DB`
+      );
+      const createdProductDTO = {
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        thumbnail: product.thumbnail,
+        stock: product.stock,
+        category: product.category,
+        owner: product.owner,
+      };
+      return createdProductDTO;
+    } catch (error) {
+      logger.error(error);
     }
-    const createdProduct = await productRepository.create(
-      title,
-      description,
-      price,
-      thumbnail,
-      code,
-      stock,
-      status,
-      category,
-      owner
-    );
-    logger.info(
-      `El producto de ID:"${createdProduct._id}" se agregó correctamente a la DB`
-    );
   };
 
   updateProduct = async (
@@ -139,7 +155,7 @@ export default class ProductManager {
       logger.warning("Asegurate que los campos tienen valores válidos");
       return;
     }
-    await productRepository.update(
+    const productUpdated = await productRepository.update(
       id,
       title,
       description,
@@ -150,12 +166,15 @@ export default class ProductManager {
       category,
       thumbnail
     );
-    logger.info("El producto ha sido actualizado correctamente");
+    productUpdated.modifiedCount === 0
+      ? logger.warning("El producto no existe o no se ha modificado")
+      : logger.info("El producto ha sido actualizado correctamente");
   };
 
   deleteProduct = async (id) => {
     try {
       const productToDelete = await productRepository.delete(id);
+      console.log(productToDelete);
 
       productToDelete
         ? logger.info(`El producto de Id ${id} ha sido borrado de la DB`)

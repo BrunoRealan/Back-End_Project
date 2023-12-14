@@ -1,5 +1,5 @@
-import CartManger from "../dao/database/CartManager.js";
-import ProductManager from "../dao/database/ProductManager.js";
+import CartManger from "../managers/CartManager.js";
+import ProductManager from "../managers/ProductManager.js";
 import logger from "../services/logger.js";
 
 const cartManager = new CartManger();

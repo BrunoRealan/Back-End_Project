@@ -1,5 +1,5 @@
-import { ChatRepository } from "../../repositories/chatRepository.js";
-import logger from "../../services/logger.js";
+import { ChatRepository } from "../repositories/chatRepository.js";
+import logger from "../services/logger.js";
 const chatRepository = new ChatRepository();
 export default class ChatManager {
   getChat = async () => {

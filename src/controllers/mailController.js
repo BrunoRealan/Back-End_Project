@@ -1,4 +1,4 @@
-import { transporter } from "../dao/database/MailManager.js";
+import { transporter } from "../managers/MailManager.js";
 import { RecoverRepository } from "../repositories/recoverRespository.js";
 import { UserRepository } from "../repositories/userRepository.js";
 import logger from "../services/logger.js";
@@ -30,8 +30,6 @@ export const sendResetMail = async (req, res) => {
     const { email } = req.body;
     const user = await userRepository.get(email);
     const recover = await recoverRepository.create(user._id);
-    logger.debug(user._id);
-    logger.debug(JSON.stringify(recover));
 
     const message = {
       from: process.env.MAIL_USER,
@@ -42,7 +40,6 @@ export const sendResetMail = async (req, res) => {
     };
     transporter.sendMail(message);
     res.send("EMail Enviado");
-    logger.info(JSON.stringify(message));
   } catch (error) {
     logger.error(error);
   }

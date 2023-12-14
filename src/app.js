@@ -6,7 +6,8 @@ import session from "express-session";
 import { Server } from "socket.io";
 import http from "http";
 import dotenv from "dotenv";
-import loggerTestRouter from "./routes/loggerTestRouter.js"
+import loggerTestRouter from "./routes/loggerTestRouter.js";
+import { asyncErrorHandler } from "./middlewares/errors/asyncErrorHandler.js";
 import mockingRouter from "./routes/mockingRouter.js";
 import userRouter from "./routes/userRouter.js";
 import chatRouter from "./routes/chatRouter.js";
@@ -14,12 +15,12 @@ import mailRouter from "./routes/mailRouter.js";
 import productsRouter from "./routes/productsRouter.js";
 import cartsRouter from "./routes/cartsRouter.js";
 import viewsRouter from "./routes/viewsRouter.js";
-import ProductManager from "./dao/database/ProductManager.js";
-import ChatManager from "./dao/database/ChatManager.js";
+import ProductManager from "./managers/ProductManager.js";
+import ChatManager from "./managers/ChatManager.js";
 import passport from "passport";
 import compression from "express-compression";
 import initializePassort from "./config/passportConfig.js";
-import { asyncErrorHandler } from "./middlewares/errors/asyncErrorHandler.js";
+import swager from "./services/swagger.js";
 import logger from "./services/logger.js";
 
 const environment = async () => {
@@ -64,11 +65,12 @@ const environment = async () => {
     });
 
     app.use(asyncErrorHandler);
-    app.use("/loggerTest", loggerTestRouter)
+    app.use("/loggerTest", loggerTestRouter);
     app.use("/mockingproducts", mockingRouter);
-    app.use("/api", userRouter);
     app.use("/chat", chatRouter);
     app.use("/mail", mailRouter);
+    app.use("/api/docs", swager);
+    app.use("/api/users", userRouter);
     app.use("/api/products", productsRouter);
     app.use("/api/carts", cartsRouter);
     app.use("/", viewsRouter);

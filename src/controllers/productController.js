@@ -1,4 +1,4 @@
-import ProductManager from "../dao/database/ProductManager.js";
+import ProductManager from "../managers/ProductManager.js";
 import logger from "../services/logger.js";
 
 const productManager = new ProductManager();
@@ -21,14 +21,13 @@ export const getProductById = async (req, res) => {
     if (product === undefined) {
       return res.status(400).send();
     }
-    res.status(200).send(product);
+    res.status(201).send(product);
   } catch (error) {
     logger.error(error);
     res.status(404).send();
   }
 };
 
-//FIX NEEDED
 export const addProduct = async (req, res) => {
   try {
     const {
@@ -40,8 +39,8 @@ export const addProduct = async (req, res) => {
       stock,
       status,
       category,
-      owner,
     } = req.body;
+    let owner = "admin";
 
     if (req.session.role === "premium") {
       owner = req.session.email;
@@ -62,14 +61,13 @@ export const addProduct = async (req, res) => {
     );
     const products = await productManager.getProducts();
     req.context.socketServer.emit("updateProducts", products);
-    res.status(200).send();
+    res.status(200).send("El producto ha sido actualizado correctamente");
   } catch (error) {
     logger.error(error);
     res.status(500).send();
   }
 };
 
-//FIX NEEDED
 export const updateProduct = async (req, res) => {
   try {
     //const productId = parseInt(req.params.pid, 10);
@@ -105,13 +103,12 @@ export const updateProduct = async (req, res) => {
     if (req.session.role === "premium") {
       productFound.owner === req.session.email
         ? await productManager.deleteProduct(productId)
-        : logger.warning("No puedes borrar un producto que no te pertenece"),
-        alert("No puedes borrar un producto que no te pertenece");
+        : alert("No puedes borrar un producto que no te pertenece");
     }
 
     const products = await productManager.getProductsAll();
     req.context.socketServer.emit("updateProducts", products);
-    res.status(200).send();
+    res.status(200).send("El producto ha sido actualizado correctamente");
   } catch (error) {
     logger.error(error);
     res.status(500).send();
@@ -139,7 +136,7 @@ export const deleteProduct = async (req, res) => {
 
     const products = await productManager.getProducts();
     req.context.socketServer.emit("updateProducts", products);
-    res.status(200).send();
+    res.status(200).send("El producto ha sido borrado correctamente");
   } catch (error) {
     logger.error(error);
     res.status(500).send();
