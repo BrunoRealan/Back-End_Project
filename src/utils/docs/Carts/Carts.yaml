@@ -1,0 +1,350 @@
+paths:
+  /api/carts:
+    get:
+      tags:
+        - Carts
+      summary: Get all carts
+      description: Get all carts from the database
+      operationId: getCarts
+      responses:
+        "200":
+          description: Carts retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                propertieres:
+                  status:
+                    type: string
+                    example: "success"
+                  carts:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Cart"
+        "404":
+          description: Cart not found
+          content:
+            application/json:
+              schema:
+                type: object
+                propertieres:
+                  status:
+                    type: string
+                    example: "failure"
+                  message:
+                    type: string
+                    example: "Carts not found"
+    post:
+      tags:
+        - Carts
+      summary: Create a new cart
+      description: Create a new cart in the database
+      operationId: createCart
+      responses:
+        "200":
+          description: The cart was created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                propertieres:
+                  status:
+                    type: string
+                  carts:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Cart"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                propertieres:
+                  status:
+                    type: string
+                    example: "failure"
+                  message:
+                    type: string
+                    example: "The Cart could not be created"
+  api/carts/{cId}:
+    get:
+      tags:
+        - Carts
+      summary: Get a cart by ID
+      description: Get a cart from the database by ID
+      operationId: getCartById
+      parameters:
+        - name: cId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "5f9b2b3b9d9d8b0017a0e7b1"
+      responses:
+        "200":
+          description: The cart was fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  cartUpdated:
+                    $ref: "#/components/schemas/Cart"
+        "404":
+          description: Cart not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "failure"
+                  message:
+                    type: string
+                    example: "Cart not found"
+    put:
+      tags:
+        - Carts
+      summary: Update a cart by ID
+      description: Update a cart in the database by ID
+      operationId: updateCartById
+      parameters:
+        - name: cId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "5f9b2b3b9d9d8b0017a0e7b1"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                products:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Product'
+      responses:
+        "200":
+          description: The cart was updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  cartUpdated:
+                    $ref: "#/components/schemas/Cart"
+        "500":
+          description: The cart could not be updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "failure"
+                  message:
+                    type: string
+                    example: "The Cart could not be updated"
+    delete:
+      tags:
+        - Carts
+      summary: Delete the products in a cart
+      description: Delete the producs in a cart in the database by ID
+      operationId: deleteAllProductsInCart
+      parameters:
+        - name: cId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "5f9b2b3b9d9d8b0017a0e7b1"
+      responses:
+        "200":
+          description: The products in the cart were deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  cartUpdated:
+                    $ref: "#/components/schemas/Cart"
+  api/carts/{cId}/products/{pId}:
+    post:
+      tags:
+        - Carts
+      summary: Add a product to a cart
+      description: Add a product to a cart in the database by ID
+      operationId: addToCart
+      parameters:
+        - name: cId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "5f9b2b3b9d9d8b0017a0e7b1"
+        - name: pId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "5f9b2b3b9d9d8b0017a0e7b1"
+      responses:
+        "200":
+          description: The product was added to the cart successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+        "400":
+          description: The product does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "failure"
+                  message:
+                    type: string
+                    example: "The product does not exist"
+        "500":
+          description: An error occurred
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "failure"
+                  message:
+                    type: string
+                    example: "The product could not be added to the cart"
+    put:
+      tags:
+        - Carts
+      summary: Modify the quantity of a product in a cart
+      description: Modify the quantity of a product in a cart in the database by ID
+      operationId: modifyQuantity
+      parameters:
+        - name: cId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: pId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+      responses:
+        "200":
+          description: The cart was updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  modifiedCart:
+                    $ref: "#/components/schemas/Cart"
+        "500":
+          description: An error occurred
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "failure"
+                  message:
+                    type: string
+                    example: "The product could not be added to the cart"
+    delete:
+      tags:
+        - Carts
+      summary: Remove a product from a cart
+      parameters:
+        - name: cId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: pId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The updated cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+  api/carts/{cId}/purchase:
+    get:
+      tags:
+        - Carts
+      summary: Purchase the items in a cart
+      parameters:
+        - name: cId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The purchased cart
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: string
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                type: string
+              quantity:
+                type: number
