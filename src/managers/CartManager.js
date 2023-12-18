@@ -105,7 +105,7 @@ export default class CartManger {
       }
       productToUpdate.quantity = quantity;
       await cart.save();
-      return;
+      return productToUpdate;
     } catch (error) {
       logger.error(error);
     }

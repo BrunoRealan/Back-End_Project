@@ -2,9 +2,8 @@ import logger from "../services/logger.js";
 
 const userRoutes = (req, res, next) => {
   if (
-    !req.session.role ||
-    req.session.role !== "user" ||
-    req.session.role !== "premium"
+    req.session.isLogged !== true ||
+    !(req.session.role === "user" || req.session.role === "premium")
   ) {
     logger.warning("No tienes las credenciales necesarias de usuario.");
     return res

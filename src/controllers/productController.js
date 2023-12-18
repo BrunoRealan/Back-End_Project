@@ -64,13 +64,12 @@ export const addProduct = async (req, res) => {
     res.status(200).send("El producto ha sido actualizado correctamente");
   } catch (error) {
     logger.error(error);
-    res.status(500).send();
+    res.status(400).send({ status: "failure", message: "Bad request" });
   }
 };
 
 export const updateProduct = async (req, res) => {
   try {
-    //const productId = parseInt(req.params.pid, 10);
     const productId = req.params.pid;
     const {
       title,
@@ -87,7 +86,30 @@ export const updateProduct = async (req, res) => {
     if (productFound === undefined) {
       return res.status(400).send();
     }
-    if (req.session.role === "admin") {
+    if (req.session.role === "premium") {
+      if (productFound.owner === req.session.email) {
+        await productManager.updateProduct(
+          productId,
+          title,
+          description,
+          code,
+          price,
+          status,
+          stock,
+          category,
+          thumbnail
+        );
+        return res.status(200).send({
+          status: "success",
+          message: "Producto actualizado correctamente",
+        });
+      } else {
+        return res.status(403).send({
+          status: "failure",
+          message: "No puedes actualizar un producto que no te pertenece",
+        });
+      }
+    } else {
       await productManager.updateProduct(
         productId,
         title,
@@ -99,46 +121,54 @@ export const updateProduct = async (req, res) => {
         category,
         thumbnail
       );
+      return res.status(200).send({
+        status: "success",
+        message: "Producto actualizado correctamente",
+      });
     }
-    if (req.session.role === "premium") {
-      productFound.owner === req.session.email
-        ? await productManager.deleteProduct(productId)
-        : alert("No puedes borrar un producto que no te pertenece");
-    }
-
-    const products = await productManager.getProductsAll();
-    req.context.socketServer.emit("updateProducts", products);
-    res.status(200).send("El producto ha sido actualizado correctamente");
   } catch (error) {
-    logger.error(error);
-    res.status(500).send();
+    return res
+      .status(500)
+      .send({ status: "failure", message: "Internal server error" });
   }
 };
 
 export const deleteProduct = async (req, res) => {
   try {
-    //const productId = parseInt(req.params.pid, 10);
     const productId = req.params.pid;
     const productFound = await productManager.getProductById(productId);
     if (productFound === undefined) {
       logger.warning("No existe el producto que quieres borrar");
-      res.status(400).send();
-    }
-    if (req.session.role === "admin") {
-      await productManager.deleteProduct(productId);
+      return res.status(400).send();
     }
     if (req.session.role === "premium") {
-      productFound.owner === req.session.email
-        ? await productManager.deleteProduct(productId)
-        : logger.warning("No puedes borrar un producto que no te pertenece"),
-        alert("No puedes borrar un producto que no te pertenece");
+      if (productFound.owner === req.session.email) {
+        await productManager.deleteProduct(productId);
+        const products = await productManager.getProducts();
+        req.context.socketServer.emit("updateProducts", products);
+        return res.status(200).send({
+          status: "success",
+          message: "El producto ha sido borrado correctamente",
+        });
+      } else {
+        return res.status(403).send({
+          status: "failure",
+          message: "No puedes borrar un producto que no te pertenece",
+        });
+      }
+    } else {
+      await productManager.deleteProduct(productId);
+      const products = await productManager.getProducts();
+      req.context.socketServer.emit("updateProducts", products);
+      return res.status(200).send({
+        status: "success",
+        message: "El producto ha sido borrado correctamente",
+      });
     }
-
-    const products = await productManager.getProducts();
-    req.context.socketServer.emit("updateProducts", products);
-    res.status(200).send("El producto ha sido borrado correctamente");
   } catch (error) {
     logger.error(error);
-    res.status(500).send();
+    return res
+      .status(500)
+      .send({ status: "failure", message: "Internal server error" });
   }
 };

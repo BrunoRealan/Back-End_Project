@@ -114,7 +114,6 @@ paths:
             application/json:
               schema:
                 type: object
-                
               example:
                 title: "Teclado inalámbrico"
                 price: 99.99
@@ -130,10 +129,12 @@ paths:
               schema:
                 type: object
                 properties:
-                  message:
+                  status:
                     type: string
-              example:
-                message: Bad request
+                    example: "failure"
+                  message:
+                    type: stringl
+                    example: "Bad request"
   /api/products/{pId}:
     get:
       tags:
@@ -204,6 +205,19 @@ paths:
               schema:
                 type: string
               example: Product successfully updated
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "failure"
+                  message:
+                    type: string
+                    example: "You cannot update a product that is not yours"
         "500":
           description: Internal server error
           content:
@@ -233,10 +247,44 @@ paths:
         "200":
           description: Product successfully deleted
           content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  message:
+                    type: string
+                    example: "Product successfully deleted"
+              example:
+                productDeleted:
+                  value:
+                    status: "success"
+                    message: "El producto ha sido borrado correctamente"
+        "400":
+          description: Product not found
+          content:
             text/plain:
               schema:
                 type: string
-              example: Product successfully deleted
+              example: No existe el producto que quieres borrar
+        "403":
+          description: Unauthorized to delete the product
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "failure"
+                  message:
+                    type: string
+                    example: "No puedes borrar un producto que no te pertenece"
+              example:
+                status: "failure"
+                message: "No puedes borrar un producto que no te pertenece"
         "500":
           description: Internal server error
           content:
@@ -244,10 +292,13 @@ paths:
               schema:
                 type: object
                 properties:
+                  status:
+                    type: string
                   message:
                     type: string
               example:
-                message: Internal server error
+                status: "failure"
+                message: "Internal server error"
 components:
   schemas:
     Product:
@@ -256,7 +307,7 @@ components:
         _id:
           type: string
           format: ObjectId
-          example: "650f87576450d93aeyydc330"
+          example: "650f87514840d93aeccdc30b"
         title:
           type: string
           example: "Teclado inalámbrico"

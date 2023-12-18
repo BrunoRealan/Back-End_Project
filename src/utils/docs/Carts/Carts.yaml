@@ -42,32 +42,31 @@ paths:
       operationId: createCart
       responses:
         "200":
-          description: The cart was created successfully
+          description: The cart was updated successfully
           content:
             application/json:
               schema:
                 type: object
-                propertieres:
+                properties:
                   status:
                     type: string
-                  carts:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/Cart"
+                    example: "success"
+                  newCart:
+                    $ref: "#/components/schemas/Cart"
         "500":
           description: Internal server error
           content:
             application/json:
               schema:
                 type: object
-                propertieres:
+                properties:
                   status:
                     type: string
                     example: "failure"
                   message:
                     type: string
                     example: "The Cart could not be created"
-  api/carts/{cId}:
+  /api/carts/{cId}:
     get:
       tags:
         - Carts
@@ -130,7 +129,7 @@ paths:
                 products:
                   type: array
                   items:
-                    $ref: '#/components/schemas/Product'
+                    $ref: "#/components/schemas/Product"
       responses:
         "200":
           description: The cart was updated successfully
@@ -183,7 +182,7 @@ paths:
                     example: "success"
                   cartUpdated:
                     $ref: "#/components/schemas/Cart"
-  api/carts/{cId}/products/{pId}:
+  /api/carts/{cId}/products/{pId}:
     post:
       tags:
         - Carts
@@ -196,13 +195,13 @@ paths:
           required: true
           schema:
             type: string
-            example: "5f9b2b3b9d9d8b0017a0e7b1"
+            example: "657f9c5c53d655ed54b97795"
         - name: pId
           in: path
           required: true
           schema:
             type: string
-            example: "5f9b2b3b9d9d8b0017a0e7b1"
+            example: "650f87514840d93aeccdc30b"
       responses:
         "200":
           description: The product was added to the cart successfully
@@ -252,11 +251,13 @@ paths:
           required: true
           schema:
             type: string
+            example: "657f9c5c53d655ed54b97795"
         - name: pId
           in: path
           required: true
           schema:
             type: string
+            example: "650f87514840d93aeccdc30b"
       requestBody:
         required: true
         content:
@@ -302,11 +303,13 @@ paths:
           required: true
           schema:
             type: string
+            example: "657f9c5c53d655ed54b97795"
         - name: pId
           in: path
           required: true
           schema:
             type: string
+            example: "650f87514840d93aeccdc30b"
       responses:
         "200":
           description: The updated cart
@@ -314,17 +317,19 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Cart"
-  api/carts/{cId}/purchase:
+  /api/carts/{cId}/purchase:
     get:
       tags:
         - Carts
-      summary: Purchase the items in a cart
+      summary: Get purchase cart tickets
+      description: Get purchase cart tickets in the database by ID
       parameters:
         - name: cId
           in: path
           required: true
           schema:
             type: string
+            example: "657f9c5c53d655ed54b97795"
       responses:
         "200":
           description: The purchased cart
