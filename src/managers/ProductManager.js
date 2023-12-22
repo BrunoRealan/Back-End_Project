@@ -105,13 +105,14 @@ export default class ProductManager {
         `El producto de ID:"${createdProduct._id}" se agregó correctamente a la DB`
       );
       const createdProductDTO = {
-        title: product.title,
-        description: product.description,
-        price: product.price,
-        thumbnail: product.thumbnail,
-        stock: product.stock,
-        category: product.category,
-        owner: product.owner,
+        _id: createdProduct._id,
+        title: createdProduct.title,
+        description: createdProduct.description,
+        price: createdProduct.price,
+        thumbnail: createdProduct.thumbnail,
+        stock: createdProduct.stock,
+        category: createdProduct.category,
+        owner: createdProduct.owner,
       };
       return createdProductDTO;
     } catch (error) {

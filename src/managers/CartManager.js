@@ -134,6 +134,7 @@ export default class CartManger {
         );
       }
       logger.info("Los productos han sido eliminados del carrito.");
+      return result;
     } catch (error) {
       logger.error(error);
     }

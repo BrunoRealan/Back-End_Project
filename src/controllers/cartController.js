@@ -11,7 +11,7 @@ export const getCarts = async (req, res) => {
     res.status(200).send({ status: "success", carts });
   } catch (error) {
     logger.error(error);
-    res.status(404).send({ status: "failure", messagge: "Carts not found" });
+    res.status(404).send({ status: "failure", message: "Carts not found" });
   }
 };
 
@@ -23,18 +23,22 @@ export const createCart = async (req, res) => {
     logger.error(error);
     res
       .status(500)
-      .send({ status: "failure", messagge: "The Cart could not be created" });
+      .send({ status: "failure", message: "The Cart could not be created" });
   }
 };
 
 export const getCartById = async (req, res) => {
   try {
-    const cartId = req.params.cId.trim(); //trim() Elimina espacios en blanco al principio y al final del param
+    const cartId = req.params.cId.trim();
     const cart = await cartManager.getCartById(cartId);
-    res.status(200).send({ status: "success", cart });
+    if (!cart) {
+      res.status(404).send({ status: "failure", message: "Cart not found" });
+    } else {
+      res.status(200).send({ status: "success", cart });
+    }
   } catch (error) {
     logger.error(error);
-    res.status(404).send({ status: "failure", messagge: "Cart not found" });
+    res.status(500).send();
   }
 };
 
@@ -43,12 +47,16 @@ export const updateCartById = async (req, res) => {
     const cartId = req.params.cId.trim();
     const { products } = req.body;
     const cartUpdated = cartManager.updateCart(cartId, products);
-    res.status(200).send({ status: "success", cartUpdated });
+    if (!cartUpdated) {
+      res.status(404).send({ status: "failure", message: "Cart not found" });
+    } else {
+      res.status(200).send({ status: "success", cartUpdated });
+    }
   } catch (error) {
     logger.error(error);
     res
       .status(500)
-      .send({ status: "failure", messagge: "The Cart could not be updated" });
+      .send({ status: "failure", message: "The Cart could not be updated" });
   }
 };
 
@@ -56,7 +64,11 @@ export const deleteAllProductsInCart = async (req, res) => {
   try {
     const cartId = req.params.cId.trim();
     const cartDeleted = await cartManager.deleteCart(cartId);
-    res.status(200).send({ status: "success", cartDeleted });
+    if (!cartDeleted) {
+      res.status(404).send({ status: "failure", message: "Cart not found" });
+    } else {
+      res.status(200).send({ status: "success", cartDeleted });
+    }
   } catch (error) {
     logger.error(error);
     res.status(500).send();
@@ -72,7 +84,7 @@ export const addToCart = async (req, res) => {
       logger.warning("No existe el producto que quieres agregar");
       return res
         .status(400)
-        .send({ status: "failure", messagge: "The product does not exist" });
+        .send({ status: "failure", message: "The product does not exist" });
     }
     if (req.session.role === "premium") {
       product.owner === req.session.email
@@ -84,7 +96,10 @@ export const addToCart = async (req, res) => {
     res.status(200).send({ status: "success" });
   } catch (error) {
     logger.error(error);
-    res.status(500).send({status: "failure", messagge: "The product could not be added to the cart"});
+    res.status(500).send({
+      status: "failure",
+      message: "The product could not be added to the cart",
+    });
   }
 };
 
@@ -101,7 +116,10 @@ export const modifyQuantityInCart = async (req, res) => {
     res.status(200).send({ status: "success", modifiedCart });
   } catch (error) {
     logger.error(error);
-    res.status(500).send({status: "failure", messagge: "The product could not be modified in the cart"});
+    res.status(500).send({
+      status: "failure",
+      message: "The product could not be modified in the cart",
+    });
   }
 };
 

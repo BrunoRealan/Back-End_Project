@@ -48,7 +48,7 @@ export const addProduct = async (req, res) => {
       owner = "admin";
     }
 
-    await productManager.addProduct(
+    const createdProduct = await productManager.addProduct(
       title,
       description,
       price,
@@ -61,7 +61,9 @@ export const addProduct = async (req, res) => {
     );
     const products = await productManager.getProducts();
     req.context.socketServer.emit("updateProducts", products);
-    res.status(200).send("El producto ha sido actualizado correctamente");
+    res
+      .status(200)
+      .send(createdProduct);
   } catch (error) {
     logger.error(error);
     res.status(400).send({ status: "failure", message: "Bad request" });
