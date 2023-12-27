@@ -31,9 +31,12 @@ export default class CartManger {
   getCartById = async (id) => {
     try {
       const cart = await cartRepository.getById(id);
-      return cart === null
-        ? logger.warning("No existe el carrito seleccionado")
-        : cart;
+      if (cart === null) {
+        logger.warning("No existe el carrito seleccionado");
+        return undefined;
+      } else {
+        return cart;
+      }
     } catch (error) {
       logger.error(error);
     }

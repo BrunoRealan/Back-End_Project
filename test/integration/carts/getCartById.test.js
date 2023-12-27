@@ -35,7 +35,7 @@ describe("Test de obtener un carrito por ID", () => {
   });
 
   it("Debería devolver un error 404 si el carrito no existe", async () => {
-    const response = await requester.get("/api/carts/nonexistentid");
+    const response = await requester.get("/api/carts/658b9396b03fe37c93d8f679");
     const { statusCode, ok, _body } = response;
 
     expect(statusCode).eql(404);

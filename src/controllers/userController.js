@@ -13,7 +13,8 @@ export const login = async (req, res) => {
   if (!req.user) {
     res.status(400).send("Tus datos no son correctos");
   }
-
+  console.log(req.body);
+  console.log(req.session);
   req.session.first_name = req.user.first_name;
   req.session.last_name = req.user.last_name;
   req.session.email = req.user.email;

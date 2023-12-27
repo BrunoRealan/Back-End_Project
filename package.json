@@ -32,6 +32,7 @@
     "passport-local": "^1.0.0",
     "postcss": "^8.4.32",
     "postcss-cli": "^11.0.0",
+    "sinon": "^17.0.1",
     "socket.io": "^4.7.2",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
