@@ -89,4 +89,15 @@ export class UserRepository {
       logger.error(error);
     }
   };
+
+  updateLastConnection = async (eMail) => {
+    try {
+      const user = await userModel.findOne({ email: eMail });
+      user.last_connection = Date.now();
+      await user.save();
+      return user.last_connection;
+    } catch (error) {
+      logger.error(error);
+    }
+  };
 }

@@ -13,8 +13,6 @@ export const login = async (req, res) => {
   if (!req.user) {
     res.status(400).send("Tus datos no son correctos");
   }
-  console.log(req.body);
-  console.log(req.session);
   req.session.first_name = req.user.first_name;
   req.session.last_name = req.user.last_name;
   req.session.email = req.user.email;
@@ -22,6 +20,10 @@ export const login = async (req, res) => {
   req.session.cart = req.user.cart;
   req.session.role = req.user.role;
   req.session.isLogged = true;
+  const lastConectionUpdated = await userRepository.updateLastConnection(
+    req.session.email
+  );
+  logger.debug(lastConectionUpdated);
   res.redirect("/profile");
 };
 
@@ -57,7 +59,6 @@ export const resetPassword = async (req, res) => {
 
 export const changeUserToPremium = async (req, res) => {
   try {
-    logger.debug(req.session.role);
     const userId = req.params.uId;
     const user = await userRepository.getById(userId);
     if (req.session.isLogged !== true) {
@@ -85,6 +86,22 @@ export const changeUserToPremium = async (req, res) => {
         }
       });
     });
+  } catch (error) {
+    logger.error(error);
+  }
+};
+
+export const sendDocuments = async (req, res) => {
+  try {
+    const userId = req.params.uId;
+    const user = await userRepository.getById(userId);
+    req.files.forEach((file) => {
+      const { originalname: name, path: reference } = file;
+      const document = { name, reference };
+      user.documents.push(document);
+    });
+    await user.save();
+    res.send("Documento agregado");
   } catch (error) {
     logger.error(error);
   }

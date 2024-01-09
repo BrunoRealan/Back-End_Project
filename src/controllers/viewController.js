@@ -105,8 +105,12 @@ export const login = async (req, res) => {
   }
 };
 
-export const logout = (req, res) => {
+export const logout = async (req, res) => {
   try {
+    const lastConectionUpdated = await userRepository.updateLastConnection(
+      req.session.email
+    );
+    logger.debug(lastConectionUpdated);
     req.session.destroy();
     res.status(200).redirect("/login");
   } catch (error) {

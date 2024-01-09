@@ -6,7 +6,9 @@ import {
   gitHubCallBack,
   resetPassword,
   changeUserToPremium,
+  sendDocuments,
 } from "../controllers/userController.js";
+import { uploadFiles } from "../middlewares/uploadFiles.js";
 
 const router = Router();
 
@@ -35,6 +37,8 @@ router.get(
 
 router.post("/resetPassword/:rId", resetPassword);
 
-router.get("/users/premium/:uId", changeUserToPremium);
+router.get("/premium/:uId", changeUserToPremium);
+
+router.post("/:uId/documents", uploadFiles.any(), sendDocuments);
 
 export default router;

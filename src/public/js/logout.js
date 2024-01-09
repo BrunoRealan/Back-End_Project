@@ -8,8 +8,9 @@ logout.addEventListener("click", () => {
       if (!response.ok) {
         throw new Error("No se pudo desloguear al usuario");
       }
-      alert("Te haz deslogueado.")
-      return response;
+      alert("Te haz deslogueado.");
+      //Redirigir a login
+      window.location.href = "/login";
     })
     .catch((error) => {
       console.error("Error al desloguear al usuario:", error);

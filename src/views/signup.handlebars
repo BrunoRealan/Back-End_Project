@@ -1,22 +1,104 @@
-<h1>Bienvenido/a a la Ecommerce Web:</h1>
-<h3>Por favor, registrate para poder comprar</h3>
-<br />
+<div
+  class="flex flex-col justify-center min-h-screen py-12 bg-gray-100 sm:px-6 lg:px-8"
+>
+  <div class="sm:mx-auto sm:w-full sm:max-w-md">
+    <h1 class="text-4xl font-extrabold text-center text-indigo-600">Bienvenido/a
+      a la Ecommerce Web:</h1>
+    <h3 class="mt-2 text-2xl font-extrabold text-center text-gray-900">Por
+      favor, registrate para poder comprar</h3>
+  </div>
 
-<form action="/api/users/signup" method="post">
-  <span>Nombre:</span>
-  <input type="text" name="first_name" value="" placeholder="Jacinto" />
-  <span>Apellido:</span>
-  <input type="text" name="last_name" value="" placeholder="de las Mercedes" />
-  <span>Email:</span>
-  <input type="text" name="email" value="" placeholder="ejemplo@gmail.com" />
-  <span>Edad:</span>
-  <input type="number" name="age" value="" placeholder="39" />
-  <span>Password:</span>
-  <input type="password" name="password" value="" placeholder="P@sSW0rD" />
-  <button value="sumbit">Registrarse</button>
-</form>
-<br />
-<a href="http://localhost:8080/login">Logueate!</a>
-<br />
-<br />
-<a href="http://localhost:8080/products">Volver a productos</a>
+  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <div class="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
+      <form action="/api/users/signup" method="post">
+        <div>
+          <label
+            for="first_name"
+            class="block text-sm font-medium text-gray-700"
+          >Nombre:</label>
+          <input
+            type="text"
+            name="first_name"
+            id="first_name"
+            class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Jacinto"
+          />
+        </div>
+
+        <div class="mt-6">
+          <label
+            for="last_name"
+            class="block text-sm font-medium text-gray-700"
+          >Apellido:</label>
+          <input
+            type="text"
+            name="last_name"
+            id="last_name"
+            class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="de las Mercedes"
+          />
+        </div>
+
+        <div class="mt-6">
+          <label
+            for="email"
+            class="block text-sm font-medium text-gray-700"
+          >Email:</label>
+          <input
+            type="text"
+            name="email"
+            id="email"
+            class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="ejemplo@gmail.com"
+          />
+        </div>
+
+        <div class="mt-6">
+          <label
+            for="age"
+            class="block text-sm font-medium text-gray-700"
+          >Edad:</label>
+          <input
+            type="number"
+            name="age"
+            id="age"
+            class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="39"
+          />
+        </div>
+
+        <div class="mt-6">
+          <label
+            for="password"
+            class="block text-sm font-medium text-gray-700"
+          >Password:</label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="P@sSW0rD"
+          />
+        </div>
+
+        <div class="mt-6">
+          <button
+            type="submit"
+            class="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >Registrarse</button>
+        </div>
+      </form>
+
+      <div class="flex mt-6 justify-evenly">
+        <a
+          href="http://localhost:8080/login"
+          class="text-indigo-600 hover:text-indigo-500"
+        >Logueate!</a>
+        <a
+          href="http://localhost:8080/products"
+          class="ml-4 text-indigo-600 hover:text-indigo-500"
+        >Volver a productos</a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -38,8 +38,8 @@ describe("Test de logueo de usuario", () => {
         return (req, res, next) => {
           req.user = {
             _id: ObjectId("658b8cb929dc4e57af32e416"),
-            first_name: "Jhon Correct",
-            last_name: "Doe Correct",
+            first_name: "Jacinto",
+            last_name: "De las Mercedes",
             email: "ejemplo@gmail.com",
             age: 39,
             cart: "1234",

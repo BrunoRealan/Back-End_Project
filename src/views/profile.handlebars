@@ -1,5 +1,22 @@
-<h1>Hola {{first_name}} {{last_name}}</h1>
-<h3>Ya puedes comenzar a comprar</h3>
-<br />
-<br />
-<a href="http://localhost:8080/products">Ver Productos</a>
+<div
+  class="flex flex-col justify-center min-h-screen py-12 bg-gray-100 sm:px-6 lg:px-8"
+>
+  <div class="sm:mx-auto sm:w-full sm:max-w-md">
+    <h1 class="text-4xl font-extrabold text-center text-indigo-600">Hola
+      {{first_name}}
+      {{last_name}}</h1>
+    <h3 class="mt-2 text-2xl font-extrabold text-center text-gray-900">Ya puedes
+      comenzar a comprar</h3>
+  </div>
+
+  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <div class="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
+      <div class="flex justify-center mt-6">
+        <a
+          href="http://localhost:8080/products"
+          class="text-indigo-600 hover:text-indigo-500"
+        >Ver Productos</a>
+      </div>
+    </div>
+  </div>
+</div>

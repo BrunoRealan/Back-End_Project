@@ -1,5 +1,3 @@
-import logger from "../../services/logger.js";
-
 const addToCartButtons = document.getElementsByClassName("addToCartButton");
 
 const buttonsArray = Array.from(addToCartButtons);
@@ -19,7 +17,7 @@ buttonsArray.forEach((button) => {
         return response;
       })
       .catch((error) => {
-        logger.error("Error al agregar el producto al carrito:", error);
+        console.error("Error al agregar el producto al carrito:", error);
       });
   });
 });
