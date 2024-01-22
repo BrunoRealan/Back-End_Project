@@ -1,6 +1,8 @@
 import { Router } from "express";
 import passport from "passport";
 import {
+  getAllUsers,
+  deleteOldUsers,
   register,
   login,
   gitHubCallBack,
@@ -9,8 +11,13 @@ import {
   sendDocuments,
 } from "../controllers/userController.js";
 import { uploadFiles } from "../middlewares/uploadFiles.js";
+import adminRoutes from "../middlewares/adminRoutes.js";
 
 const router = Router();
+
+router.get("/", adminRoutes, getAllUsers);
+
+router.delete("/", adminRoutes, deleteOldUsers);
 
 router.post(
   "/signup",

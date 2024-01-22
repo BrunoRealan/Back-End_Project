@@ -2,7 +2,6 @@ import { fileURLToPath } from "url";
 import { dirname, join, extname } from "path";
 import multer from "multer";
 import fs from "fs";
-import imageType from "image-type";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -37,9 +36,9 @@ const fileFilter = function (req, file, cb) {
     file.mimetype === "image/webp" ||
     file.mimetype === "application/pdf"
   ) {
-    cb(null, true); // accept the file
+    cb(null, true); // aceptar el file
   } else {
-    cb(null, false); // reject the file
+    cb(null, false); // rechasar el file
   }
 };
 

@@ -128,13 +128,12 @@ export const deleteProductInCart = async (req, res) => {
   try {
     const cartId = req.params.cId.trim();
     const productId = req.params.pId.trim();
-    const productCartDeleted = await cartManager.deleteProductCart(
+    await cartManager.deleteProductInCart(
       cartId,
       productId
     );
     res.status(200).send({
       status: "The product in cart was eliminated",
-      productCartDeleted,
     });
   } catch (error) {
     logger.error(error);

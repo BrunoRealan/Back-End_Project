@@ -1,11 +1,12 @@
-import { transporter } from "../managers/MailManager.js";
+import transporter from "../services/mailTransporter.js";
 import { RecoverRepository } from "../repositories/recoverRespository.js";
 import { UserRepository } from "../repositories/userRepository.js";
 import logger from "../services/logger.js";
 import dotenv from "dotenv";
+import UserManager from "../managers/UserManager.js";
 
 dotenv.config();
-const userRepository = new UserRepository();
+const userManager = new UserManager();
 const recoverRepository = new RecoverRepository();
 
 export const sendMail = async (req, res) => {
@@ -28,8 +29,8 @@ export const sendMail = async (req, res) => {
 export const sendResetMail = async (req, res) => {
   try {
     const { email } = req.body;
-    const user = await userRepository.get(email);
-    const recover = await recoverRepository.create(user._id);
+    const user = await userManager.getByEmail(email);
+    const recover = await userManager.createRecoverTicket(user._id);
 
     const message = {
       from: process.env.MAIL_USER,

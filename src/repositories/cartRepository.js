@@ -12,18 +12,6 @@ export class CartRepository {
     }
   };
 
-  getAll = async () => {
-    try {
-      const carts = await cartModel.find();
-      const cartsDTO = {
-        //DTO FOR GETCARTS
-      };
-      return carts;
-    } catch (error) {
-      logger.error(error);
-    }
-  };
-
   getById = async (id) => {
     try {
       const cart = await cartModel

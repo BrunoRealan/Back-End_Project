@@ -15,55 +15,71 @@
 
   <div class="mt-8 sm:mx-auto sm:w-full md:max-w-4xl">
     <div class="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
-      <div
-        class="grid grid-cols-1 gap-4 md:grid-cols-2"
-      >
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         {{#each response.payload}}
-          <div class="flex flex-col items-center p-4 bg-white rounded-lg shadow-lg dark:bg-gray-800">
+          <div
+            class="flex flex-col items-center p-4 bg-white rounded-lg shadow-lg dark:bg-gray-800"
+          >
             <h4
               class="mb-4 font-semibold text-gray-600 dark:text-gray-300"
             >Nombre: {{title}}</h4>
             <p class="text-gray-600 dark:text-gray-400">Descripción:
               {{description}}</p>
-            <p class="text-gray-600 dark:text-gray-400">Código: {{code}}</p>
             <p class="text-gray-600 dark:text-gray-400">Precio: {{price}}</p>
-            <p class="text-gray-600 dark:text-gray-400">Status: {{status}}</p>
             <p class="text-gray-600 dark:text-gray-400">Stock: {{stock}}</p>
             <p class="text-gray-600 dark:text-gray-400">Categoría:
               {{category}}</p>
-            <button
-              class="px-2 py-1 mt-4 text-white bg-indigo-600 rounded-lg addToCartButton"
-              data-product-id="{{_id}}"
-              data-cart-id="{{cart}}"
-            >Agregar al Carrito</button>
+            {{#if cart}}
+              {{#if id}}<button
+                  class="px-2 py-1 mt-4 text-white bg-indigo-600 rounded-lg addToCartButton"
+                  data-product-id="{{id}}"
+                  data-cart-id="{{cart}}"
+                >Agregar al Carrito</button>
+              {{/if}}
+            {{/if}}
           </div>
         {{/each}}
       </div>
-
       <div class="flex mt-6 justify-evenly">
-        <a
-          href="http://localhost:8080/cart/{{response.payload.cart}}"
-          class="text-indigo-600 hover:text-indigo-500"
-        >Ir al Carrito!</a>
-        <a
-          href="{{response.prevLink}}"
-          class="text-indigo-600 hover:text-indigo-500"
-        >Pagina Anterior: {{response.prevPage}}</a>
-        <a
-          href="{{response.nextLink}}"
-          class="text-indigo-600 hover:text-indigo-500"
-        >Pagina Siguiente: {{response.nextPage}}</a>
+        {{#if response.prevLink}}
+          <a
+            href="{{response.prevLink}}"
+            class="text-indigo-600 hover:text-indigo-500"
+          >Pagina Anterior: {{response.prevPage}}</a>
+        {{/if}}
+        {{#if response.payload.cart}}
+          <a
+            href="http://localhost:8080/cart/{{response.payload.cart}}"
+            class="text-indigo-600 hover:text-indigo-500"
+          >Ir al Carrito!</a>
+        {{/if}}
+        {{#if response.nextLink}}
+          <a
+            href="{{response.nextLink}}"
+            class="text-indigo-600 hover:text-indigo-500"
+          >Pagina Siguiente: {{response.nextPage}}</a>
+        {{/if}}
       </div>
 
       <div class="mt-6">
-        <button
-          id="logoutButton"
-          class="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >Desloguear!</button>
+        {{#if response.payload.cart}}
+          <button
+            id="logoutButton"
+            class="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >Desloguear!</button>
+        {{else}}
+          <button
+            id="loginButton"
+            class="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >Loguear!</button>
+        {{/if}}
+
       </div>
     </div>
   </div>
 </div>
 
-<script type="module" src="/js/products.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="module" src="/js/addProducts.js"></script>
 <script type="module" src="/js/logout.js"></script>
+<script type="module" src="/js/login.js"></script>

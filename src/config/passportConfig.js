@@ -19,7 +19,7 @@ const initializePassort = () => {
       async (req, username, password, done) => {
         try {
           const { first_name, last_name, age } = req.body;
-          const userExists = await userRepository.get(username);
+          const userExists = await userRepository.getByEmail(username);
 
           if (userExists) {
             return done(null, false);
@@ -57,7 +57,7 @@ const initializePassort = () => {
       { usernameField: "email" },
       async (username, password, done) => {
         try {
-          const user = await userRepository.get(username);
+          const user = await userRepository.getByEmail(username);
           if (!user) {
             return done(null, false);
           }
@@ -86,7 +86,7 @@ const initializePassort = () => {
         try {
           //console.log(profile, "profile");
           const email = profile.emails[0].value;
-          const user = await userRepository.get(email);
+          const user = await userRepository.getByEmail(email);
           if (!user) {
             const newCart = await cartRepository.create();
 

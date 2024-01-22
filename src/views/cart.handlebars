@@ -1,23 +1,79 @@
-<h2>{{first_name}}
-  {{last_name}}
-  tiene los siguientes productos en su carrito:</h2>
-
-{{#each response.products}}
-  <div>
-    <p>Nombre: {{product.title}}</p>
-    <p>Descripción: {{product.description}}</p>
-    <p>Categoría: {{product.category}}</p>
-    <p>Precio: {{product.price}}</p>
-    <p>Cantidad: {{quantity}}</p>
-    <p>Código: {{product.code}}</p>
-    <p>Stock: {{product.stock}}</p>
-    <br />
-    <br />
-    <br />
+<div
+  class="flex flex-col justify-center min-h-screen py-12 bg-gray-100 sm:px-6 lg:px-8"
+>
+  <div class="sm:mx-auto sm:w-full sm:max-w-md">
+    <h2 class="text-4xl font-extrabold text-center text-indigo-600">
+      {{first_name}}
+      {{last_name}}
+      tiene los siguientes productos en su carrito:
+    </h2>
   </div>
-{{/each}}
 
-<a href="http://localhost:8080/products">Volver a Productos</a>
-<br />
-<br />
-<br />
+  <div class="mt-8 sm:mx-auto sm:w-full md:max-w-4xl">
+    <div class="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
+      {{#if response.products}}
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {{#each response.products}}
+            <div
+              class="flex flex-col items-center p-4 bg-white rounded-lg shadow-lg dark:bg-gray-800"
+            >
+              <h4
+                class="mb-4 font-semibold text-gray-600 dark:text-gray-300"
+              >Nombre: {{product.title}}</h4>
+              <p class="text-gray-600 dark:text-gray-400">Descripción:
+                {{product.description}}</p>
+              <p class="text-gray-600 dark:text-gray-400">Categoría:
+                {{product.category}}</p>
+              <p class="text-gray-600 dark:text-gray-400">Precio:
+                {{product.price}}</p>
+              <p class="text-gray-600 dark:text-gray-400">Cantidad:
+                {{quantity}}</p>
+              <p class="text-gray-600 dark:text-gray-400">Stock:
+                {{product.stock}}</p>
+                <button
+                  class="px-2 py-1 mt-4 text-white bg-indigo-600 rounded-lg deleteButton"
+                  data-product-id="{{product._id}}"
+                  data-cart-id="{{../response._id}}"
+                >Borrar</button>
+            </div>
+          {{/each}}
+        {{else}}
+          <div
+            class="flex flex-col items-center p-4 bg-white rounded-lg shadow-lg dark:bg-gray-800"
+          >
+            <h4 class="mb-4 font-semibold text-gray-600 dark:text-gray-300">No
+              hay productos en el carrito</h4>
+          </div>
+        {{/if}}
+      </div>
+      {{#if response.products}}
+      <div class="flex justify-center mt-6">
+          <button
+          id="deleteAllProductsButton"
+          data-cart-id="{{cartId}}"
+          class="px-2 py-1 text-white bg-orange-600 rounded-lg">Borrar todos los productos</button></div>
+        {{/if}}
+      <div class="flex justify-center mx-10 mt-6">
+        <a
+          href="http://localhost:8080/products"
+          class="text-indigo-600 hover:text-indigo-500"
+        >Volver a Productos</a>
+      </div>
+      {{#if response.products}}
+      <div class="flex mt-6 justify-evenly">
+        <button
+          id="purchaseButton"
+          data-cart-id="{{cartId}}"
+          class="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >Comprar!</button>
+      </div>
+      {{/if}}
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="module" src="/js/purchase.js"></script>
+<script type="module" src="/js/deleteProduct.js"></script>
+<script type="module" src="/js/deleteAllProducts.js"></script>

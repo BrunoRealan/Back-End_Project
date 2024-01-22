@@ -1,13 +1,11 @@
 import ProductManager from "../managers/ProductManager.js";
 import CartManger from "../managers/CartManager.js";
-import { RecoverRepository } from "../repositories/recoverRespository.js";
-import { UserRepository } from "../repositories/userRepository.js";
+import UserManager from "../managers/UserManager.js";
 import logger from "../services/logger.js";
 
 const productManager = new ProductManager();
 const cartManager = new CartManger();
-const recoverRepository = new RecoverRepository();
-const userRepository = new UserRepository();
+const userManager = new UserManager();
 
 export const getProductsLogged = async (req, res) => {
   try {
@@ -55,13 +53,13 @@ export const getCartById = async (req, res) => {
     const cartId = req.params.cId.trim(); //trim() Elimina espacios en blanco al principio y al final de params
     const cartDocument = await cartManager.getCartById(cartId);
     const response = cartDocument.toObject(); //toObject() Retorna objeto palano para handlebars
-
     res.status(200).render("cart", {
       response,
       first_name,
       last_name,
       email,
       age,
+      cartId,
     });
   } catch (error) {
     logger.error(error);
@@ -107,10 +105,7 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    const lastConectionUpdated = await userRepository.updateLastConnection(
-      req.session.email
-    );
-    logger.debug(lastConectionUpdated);
+    await userManager.updateLastConnection(req.session.email);
     req.session.destroy();
     res.status(200).redirect("/login");
   } catch (error) {
@@ -131,7 +126,7 @@ export const sendResetPassword = async (req, res) => {
 export const resetPassword = async (req, res) => {
   try {
     const recoverId = req.params.rId;
-    const recover = await recoverRepository.getById(recoverId);
+    const recover = await userManager.getRecoverTicket(recoverId);
     const actualDate = new Date();
 
     if (recover.expire_at.getTime() <= actualDate.getTime()) {

@@ -1,9 +1,27 @@
-import { UserRepository } from "../repositories/userRepository.js";
-import { RecoverRepository } from "../repositories/recoverRespository.js";
+import UserManager from "../managers/UserManager.js";
 import logger from "../services/logger.js";
 
-const userRepository = new UserRepository();
-const recoverRepository = new RecoverRepository();
+const userManager = new UserManager();
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await userManager.getAllUsers();
+    res.status(200).send({ status: "success", payload: users });
+  } catch (error) {
+    logger.error(error);
+  }
+};
+
+export const deleteOldUsers = async (req, res) => {
+  try {
+    const usersToDelete = await userManager.usersToDelete();
+    await userManager.sendMailToDeleteUsers(usersToDelete);
+    await userManager.deleteUsers(usersToDelete);
+    return res.status(200).send({ status: "success" });
+  } catch (error) {
+    logger.error(error);
+  }
+};
 
 export const register = async (req, res) => {
   res.redirect("/login");
@@ -20,7 +38,7 @@ export const login = async (req, res) => {
   req.session.cart = req.user.cart;
   req.session.role = req.user.role;
   req.session.isLogged = true;
-  const lastConectionUpdated = await userRepository.updateLastConnection(
+  const lastConectionUpdated = await userManager.updateLastConnection(
     req.session.email
   );
   logger.debug(lastConectionUpdated);
@@ -42,8 +60,8 @@ export const resetPassword = async (req, res) => {
   try {
     const recoverId = req.params.rId;
     const { password } = req.body;
-    const recover = await recoverRepository.getById(recoverId);
-    const userPassUpdate = await userRepository.updatePass(
+    const recover = await userManager.getRecoverTicket(recoverId);
+    const userPassUpdate = await userManager.updatePassword(
       recover.userId,
       password
     );
@@ -60,19 +78,18 @@ export const resetPassword = async (req, res) => {
 export const changeUserToPremium = async (req, res) => {
   try {
     const userId = req.params.uId;
-    const user = await userRepository.getById(userId);
+    const user = await userManager.getById(userId);
     if (req.session.isLogged !== true) {
       let warn = "Debes iniciar sesión";
       logger.warning(warn);
-      alert(warn);
     }
     if (req.session.role === "user" && user.role === "user") {
-      await userRepository.changeCredential(userId);
+      await userManager.changeUserCredential(userId);
       req.session.role = "premium";
       req.session.save();
       logger.info("Ahora tienes credenciales premium");
     } else if (req.session.role === "premium" && user.role === "premium") {
-      await userRepository.changeCredential(userId);
+      await userManager.changeUserCredential(userId);
       req.session.role = "user";
       req.session.save();
       logger.info("Ya no tienes credenciales premium");
@@ -94,7 +111,7 @@ export const changeUserToPremium = async (req, res) => {
 export const sendDocuments = async (req, res) => {
   try {
     const userId = req.params.uId;
-    const user = await userRepository.getById(userId);
+    const user = await userManager.getById(userId);
     req.files.forEach((file) => {
       const { originalname: name, path: reference } = file;
       const document = { name, reference };

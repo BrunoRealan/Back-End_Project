@@ -1,12 +1,62 @@
-{{#each response.payload}}
-<p>ID: {{_id}}</p>
-<p>Nombre: {{title}}</p>
-<p>Descripción: {{description}}</p>
-<p>Código: {{code}}</p>
-<p>Precio: {{price}}</p>
-<p>Status: {{status}}</p>
-<p>Stock: {{stock}}</p>
-<p>Categoría: {{category}}</p>
-<br>
-<br>
-{{/each}}
+<div
+  class="flex flex-col justify-center min-h-screen py-12 bg-gray-100 sm:px-6 lg:px-8"
+>
+  <div class="sm:mx-auto sm:w-full sm:max-w-md">
+    <h1 class="text-4xl font-extrabold text-center text-indigo-600">Bienvenido
+      {{first_name}}
+      {{last_name}}
+      a la tienda BackEnd</h1>
+    <h3 class="mt-2 text-2xl font-extrabold text-center text-gray-900">Estos son
+      los siguientes productos:</h3>
+    <h3
+      class="mt-2 text-2xl font-extrabold text-center text-gray-900"
+    >{{role}}</h3>
+  </div>
+
+  <div class="mt-8 sm:mx-auto sm:w-full md:max-w-4xl">
+    <div class="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        {{#each response.payload}}
+          <div
+            class="flex flex-col items-center p-4 bg-white rounded-lg shadow-lg dark:bg-gray-800"
+          >
+            <h4
+              class="mb-4 font-semibold text-gray-600 dark:text-gray-300"
+            >Nombre: {{title}}</h4>
+            <p class="text-gray-600 dark:text-gray-400">Descripción:
+              {{description}}</p>
+            <p class="text-gray-600 dark:text-gray-400">Precio: {{price}}</p>
+            <p class="text-gray-600 dark:text-gray-400">Stock: {{stock}}</p>
+            <p class="text-gray-600 dark:text-gray-400">Categoría:
+              {{category}}</p>
+          </div>
+        {{/each}}
+      </div>
+
+      <div class="flex mt-6 justify-evenly">
+        {{#if response.prevLink}}
+          <a
+            href="{{response.prevLink}}"
+            class="text-indigo-600 hover:text-indigo-500"
+          >Pagina Anterior: {{response.prevPage}}</a>
+        {{/if}}
+        {{#if response.nextLink}}
+          <a
+            href="{{response.nextLink}}"
+            class="text-indigo-600 hover:text-indigo-500"
+          >Pagina Siguiente: {{response.nextPage}}</a>
+        {{/if}}
+      </div>
+
+      <div class="mt-6">
+        <button
+          id="loginButton"
+          class="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        >Loguear!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="/js/products.js"></script>
+<script type="module" src="/js/login.js"></script>

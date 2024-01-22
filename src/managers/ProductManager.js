@@ -21,9 +21,21 @@ export default class ProductManager {
         modelSort,
         modelPage
       );
+
+      const docsDTO = products.docs.map((p) => ({
+        id: p._id,
+        title: p.title,
+        description: p.description,
+        price: p.price,
+        thumbnail: p.thumbnail,
+        stock: p.stock,
+        category: p.category,
+        owner: p.owner,
+      }));
+
       const productsDTO = {
         status: "success",
-        payload: products.docs,
+        payload: docsDTO,
         totalPages: products.totalPages,
         prevPage: products.prevPage,
         nextPage: products.nextPage,

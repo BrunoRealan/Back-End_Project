@@ -36,7 +36,7 @@ router.get("/realtimeproducts", userRoutes, realTimeProducts);
 router.get("/chat", userRoutes, chat);
 router.get("/signup", publicRoutes, signup);
 router.get("/login", publicRoutes, login);
-router.get("/logout", logout);
+router.post("/logout", logout);
 router.get("/sendResetPassword", sendResetPassword);
 router.get("/resetPassword/:rId",resetPassword)
 router.get("/failregister", failregister);
