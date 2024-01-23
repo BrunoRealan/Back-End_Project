@@ -1,3 +1,8 @@
+// Then, when making requests, use SERVER_URL:
+fetch(`${window.SERVER_URL}/login`, {
+  // Your fetch options...
+})
+
 const addToCartButtons = document.getElementsByClassName("addToCartButton");
 
 const buttonsArray = Array.from(addToCartButtons);
@@ -7,7 +12,7 @@ buttonsArray.forEach((button) => {
     const productId = button.dataset.productId;
     const cartId = button.dataset.cartId;
     // Realiza la solicitud POST
-    fetch(`http://localhost:8080/api/carts/${cartId}/products/${productId}`, {
+    fetch(`http://${window.SERVER_URL}/api/carts/${cartId}/products/${productId}`, {
       method: "POST",
     })
       .then((response) => {

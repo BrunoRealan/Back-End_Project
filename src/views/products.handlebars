@@ -48,8 +48,9 @@
           >Pagina Anterior: {{response.prevPage}}</a>
         {{/if}}
         {{#if response.payload.cart}}
+          <!--  Reemplazar con URL de app en producción o local -->
           <a
-            href="http://localhost:8080/cart/{{response.payload.cart}}"
+            href="https://back-endproject-production.up.railway.app/cart/{{response.payload.cart}}"
             class="text-indigo-600 hover:text-indigo-500"
           >Ir al Carrito!</a>
         {{/if}}
@@ -79,6 +80,9 @@
   </div>
 </div>
 
+<script>
+  window.SERVER_URL = "https://back-endproject-production.up.railway.app/";
+</script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="module" src="/js/addProducts.js"></script>
 <script type="module" src="/js/logout.js"></script>

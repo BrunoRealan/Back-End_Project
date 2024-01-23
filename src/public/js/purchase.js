@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (purchaseButton) {
     const cartId = purchaseButton.dataset.cartId;
     purchaseButton.addEventListener("click", function () {
-      fetch(`http://localhost:8080/api/carts/${cartId}/purchase`, {
+      fetch(`http://${window.SERVER_URL}/api/carts/${cartId}/purchase`, {
         method: "POST",
       }).then((response) => {
         if (!response.ok) {

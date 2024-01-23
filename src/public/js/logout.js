@@ -12,9 +12,9 @@ document.addEventListener("DOMContentLoaded", (event) => {
         confirmButtonText: "Si, deslogueame!",
       }).then((result) => {
         if (result.isConfirmed) {
-          fetch("http://localhost:8080/logout", {
+          fetch`http://${window.SERVER_URL}/logout`, {
             method: "POST",
-          })
+          }
             .then((response) => {
               if (!response.ok) {
                 throw new Error("No se pudo desloguear al usuario");

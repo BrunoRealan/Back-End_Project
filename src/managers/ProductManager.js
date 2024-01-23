@@ -42,11 +42,12 @@ export default class ProductManager {
         page: products.page,
         hasPrevPage: products.hasPrevPage,
         hasNextPage: products.hasNextPage,
+        //Reemplazar con el link de producción o local
         prevLink: products.hasPrevPage
-          ? `http://localhost:8080/products/?page=${products.prevPage}`
+          ? `https://back-endproject-production.up.railway.app/products/?page=${products.prevPage}`
           : null,
         nextLink: products.hasNextPage
-          ? `http://localhost:8080/products/?page=${products.nextPage}`
+          ? `https://back-endproject-production.up.railway.app/products/?page=${products.nextPage}`
           : null,
       };
       return productsDTO;

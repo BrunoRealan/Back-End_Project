@@ -53,9 +53,10 @@
           data-cart-id="{{cartId}}"
           class="px-2 py-1 text-white bg-orange-600 rounded-lg">Borrar todos los productos</button></div>
         {{/if}}
+        {{!--  Reemplazar con URL de app en producción o local --}}
       <div class="flex justify-center mx-10 mt-6">
         <a
-          href="http://localhost:8080/products"
+          href="https://back-endproject-production.up.railway.app/products"
           class="text-indigo-600 hover:text-indigo-500"
         >Volver a Productos</a>
       </div>
@@ -73,6 +74,9 @@
   </div>
 </div>
 
+<script>
+  window.SERVER_URL = "https://back-endproject-production.up.railway.app/";
+</script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="module" src="/js/purchase.js"></script>
 <script type="module" src="/js/deleteProduct.js"></script>
