@@ -7,7 +7,7 @@ buttonsArray.forEach((button) => {
     const productId = button.dataset.productId;
     const cartId = button.dataset.cartId;
     // Realiza la solicitud POST
-    fetch(`http://${window.SERVER_URL}/api/carts/${cartId}/products/${productId}`, {
+    fetch(`https://${window.SERVER_URL}/api/carts/${cartId}/products/${productId}`, {
       method: "DELETE",
     })
       .then((response) => {
