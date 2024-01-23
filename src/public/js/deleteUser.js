@@ -1,12 +1,11 @@
 const deleteUserButtons = document.getElementsByClassName("deleteUserButton");
 
 const buttonsArray = Array.from(deleteUserButtons);
-// Add an event listener to each button
+// Agrerga un controlador de eventos a cada botón
 buttonsArray.forEach((button) => {
   button.addEventListener("click", (e) => {
     e.preventDefault();
     const userId = button.dataset.userId;
-    // Make the DELETE request
     Swal.fire({
       title: "¿Estás seguro/a?",
       text: "¿Ésta acción no se puede deshacer y eliminará el usuario",
@@ -17,7 +16,7 @@ buttonsArray.forEach((button) => {
       confirmButtonText: "Sí, borralo!",
     }).then((result) => {
       if (result.isConfirmed) {
-        // Make the DELETE request
+        // Hacer la solicitud DELETE
         fetch(`${window.SERVER_URL}/api/users/${userId}`, {
           method: "DELETE",
         })

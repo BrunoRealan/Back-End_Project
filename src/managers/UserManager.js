@@ -30,7 +30,8 @@ export default class UserManager {
     try {
       const users = await userRepository.getAll();
       console.log("users:", users);
-      const usersDTO = users.map((user) => ({
+      const realUsers = users.filter((user) => user.role !== "admin");
+      const usersDTO = realUsers.map((user) => ({
         id: user._id.toString(),
         name: `${user.first_name} ${user.last_name}`,
         email: user.email,
