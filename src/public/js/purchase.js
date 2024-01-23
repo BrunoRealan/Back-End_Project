@@ -5,8 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
     purchaseButton.addEventListener("click", function () {
       Swal.fire({
         title: "Confirmar compra",
-        text: "Esta seguro que desea confirmar la compra?",
-        icon: "warning",
+        text: "¿Está seguro que desea confirmar la compra?",
+        icon: "question",
         showCancelButton: true,
         confirmButtonText: "Si",
         cancelButtonText: "No",

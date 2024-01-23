@@ -121,14 +121,16 @@ export default class UserManager {
   usersToDelete = async () => {
     try {
       const users = await userRepository.getAll();
-      console.log("All users:", users);
       //Filtra los usuarios que no se conectaron en los ultimos 2 dias
       const usersToDelete = users.filter(
         (user) =>
           new Date(user.last_connection).getTime() < Date.now() - 86400000 * 2
       );
-      console.log("Users to delete:", usersToDelete);
-      return usersToDelete;
+      //Filtra los usuarios que no son admin
+      const usersWithoutAdmin = usersToDelete.filter(
+        (user) => user.role !== "admin"
+      );
+      return usersWithoutAdmin;
     } catch (error) {
       logger.error(error);
     }
