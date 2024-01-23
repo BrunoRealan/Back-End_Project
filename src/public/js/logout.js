@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         confirmButtonText: "Si, deslogueame!",
       }).then((result) => {
         if (result.isConfirmed) {
-          fetch`https://${window.SERVER_URL}/logout`, {
+          fetch`${window.SERVER_URL}/logout`, {
             method: "POST",
           }
             .then((response) => {

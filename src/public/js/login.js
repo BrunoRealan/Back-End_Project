@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   const loginButton = document.getElementById("loginButton");
   if (loginButton) {
     loginButton.addEventListener("click", function () {
-      fetch(`https://${window.SERVER_URL}/login`, {
+      fetch(`${window.SERVER_URL}/login`, {
         method: "GET",
       })
         .then((response) => {
