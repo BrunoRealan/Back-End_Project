@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
         cancelButtonText: "No",
       }).then((result) => {
         if (result.isConfirmed) {
-          fetch(`http://localhost:8080/api/carts/${cartId}`, {
+          fetch(`http://${window.SERVER_URL}/api/carts/${cartId}`, {
             method: "DELETE",
           })
             .then((response) => {
