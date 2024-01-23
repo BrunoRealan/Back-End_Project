@@ -11,7 +11,8 @@ import {
   failregister,
   profile,
   sendResetPassword,
-  resetPassword
+  resetPassword,
+  admin,
 } from "../controllers/viewController.js";
 import publicRoutes from "../middlewares/publicRoutes.js";
 import privateRoutes from "../middlewares/privateRoutes.js";
@@ -38,8 +39,10 @@ router.get("/signup", publicRoutes, signup);
 router.get("/login", publicRoutes, login);
 router.post("/logout", logout);
 router.get("/sendResetPassword", sendResetPassword);
-router.get("/resetPassword/:rId",resetPassword)
+router.get("/resetPassword/:rId", resetPassword);
 router.get("/failregister", failregister);
 router.get("/profile", privateRoutes, profile);
+router.get("/admin", admin);
+
 
 export default router;

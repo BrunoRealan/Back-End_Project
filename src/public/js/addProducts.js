@@ -1,8 +1,3 @@
-// Then, when making requests, use SERVER_URL:
-fetch(`${window.SERVER_URL}/login`, {
-  // Your fetch options...
-})
-
 const addToCartButtons = document.getElementsByClassName("addToCartButton");
 
 const buttonsArray = Array.from(addToCartButtons);

@@ -61,9 +61,7 @@ export const addProduct = async (req, res) => {
     );
     const products = await productManager.getProducts();
     req.context.socketServer.emit("updateProducts", products);
-    res
-      .status(200)
-      .send(createdProduct);
+    res.status(200).send(createdProduct);
   } catch (error) {
     logger.error(error);
     res.status(400).send({ status: "failure", message: "Bad request" });
@@ -145,6 +143,7 @@ export const deleteProduct = async (req, res) => {
     }
     if (req.session.role === "premium") {
       if (productFound.owner === req.session.email) {
+        await productManager.sendMailDeleteProduct(req.session.email);
         await productManager.deleteProduct(productId);
         const products = await productManager.getProducts();
         req.context.socketServer.emit("updateProducts", products);
@@ -159,6 +158,8 @@ export const deleteProduct = async (req, res) => {
         });
       }
     } else {
+      const product = await productManager.getProductById(productId);
+      await productManager.sendMailDeleteProduct(product.owner);
       await productManager.deleteProduct(productId);
       const products = await productManager.getProducts();
       req.context.socketServer.emit("updateProducts", products);

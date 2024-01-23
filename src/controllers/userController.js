@@ -12,6 +12,20 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
+export const deleteUser = async (req, res) => {
+  try {
+    const userId = req.params.uId;
+    const user = await userManager.deleteOne(userId);
+    if (user === undefined) {
+      logger.warning("No se pudo eliminar el usuario");
+      return;
+    }
+    res.status(200).send({ status: "success" });
+  } catch (error) {
+    logger.error(error);
+  }
+};
+
 export const deleteOldUsers = async (req, res) => {
   try {
     const usersToDelete = await userManager.usersToDelete();
@@ -75,34 +89,20 @@ export const resetPassword = async (req, res) => {
   }
 };
 
-export const changeUserToPremium = async (req, res) => {
+export const changeCredentials = async (req, res) => {
   try {
     const userId = req.params.uId;
     const user = await userManager.getById(userId);
-    if (req.session.isLogged !== true) {
-      let warn = "Debes iniciar sesión";
-      logger.warning(warn);
-    }
-    if (req.session.role === "user" && user.role === "user") {
+
+    if (user.role === "user" || user.role === "premium") {
       await userManager.changeUserCredential(userId);
-      req.session.role = "premium";
-      req.session.save();
-      logger.info("Ahora tienes credenciales premium");
-    } else if (req.session.role === "premium" && user.role === "premium") {
-      await userManager.changeUserCredential(userId);
-      req.session.role = "user";
-      req.session.save();
-      logger.info("Ya no tienes credenciales premium");
+      logger.info(
+        user.role === "user"
+          ? "Ahora tienes credenciales premium"
+          : "Ya no tienes credenciales premium"
+      );
     }
-    req.session.save(() => {
-      req.session.reload((err) => {
-        if (err) {
-          console.error(err);
-        } else {
-          res.redirect("/profile");
-        }
-      });
-    });
+    res.status(200).send({ status: "success" });
   } catch (error) {
     logger.error(error);
   }

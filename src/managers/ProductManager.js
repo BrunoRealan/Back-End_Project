@@ -1,5 +1,7 @@
 import { ProductRepository } from "../repositories/productRepository.js";
+import transporter from "../services/mailTransporter.js";
 import logger from "../services/logger.js";
+import dotenv from "dotenv";
 
 const productRepository = new ProductRepository();
 export default class ProductManager {
@@ -188,11 +190,35 @@ export default class ProductManager {
   deleteProduct = async (id) => {
     try {
       const productToDelete = await productRepository.delete(id);
-      console.log(productToDelete);
-
       productToDelete
         ? logger.info(`El producto de Id ${id} ha sido borrado de la DB`)
         : logger.warning("El producto no existe o ya ha sido borrado");
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
+  sendMailDeleteProduct = async (email) => {
+    try {
+      if (email === undefined) {
+        logger.info("No hay usuarios para enviar mail");
+        return;
+      }
+      const sendUserMail = async (email) => {
+        const message = {
+          from: process.env.MAIL_USER,
+          to: email,
+          subject: "Un producto premium fue eliminado",
+          text: "Te enviamos este mail para notificarte que tu producto premium fue eliminado",
+          html: "<p>Te enviamos este mail para notificarte que tu producto premium fue eliminado</p>",
+        };
+        await transporter.sendMail(message);
+        return;
+      };
+      //Envia un mail a cada usuario que se va a eliminar
+      await sendUserMail(user);
+      logger.info("El mail por objeto borrado fue enviado al usuario");
+      return;
     } catch (error) {
       logger.error(error);
     }

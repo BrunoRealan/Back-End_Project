@@ -3,11 +3,12 @@ import passport from "passport";
 import {
   getAllUsers,
   deleteOldUsers,
+  deleteUser,
   register,
   login,
   gitHubCallBack,
   resetPassword,
-  changeUserToPremium,
+  changeCredentials,
   sendDocuments,
 } from "../controllers/userController.js";
 import { uploadFiles } from "../middlewares/uploadFiles.js";
@@ -18,6 +19,8 @@ const router = Router();
 router.get("/", adminRoutes, getAllUsers);
 
 router.delete("/", adminRoutes, deleteOldUsers);
+
+router.delete("/:uId", adminRoutes, deleteUser);
 
 router.post(
   "/signup",
@@ -44,7 +47,7 @@ router.get(
 
 router.post("/resetPassword/:rId", resetPassword);
 
-router.get("/premium/:uId", changeUserToPremium);
+router.get("/premium/:uId", changeCredentials);
 
 router.post("/:uId/documents", uploadFiles.any(), sendDocuments);
 

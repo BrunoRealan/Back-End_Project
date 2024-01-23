@@ -1,0 +1,48 @@
+<div
+  class="flex flex-col justify-center min-h-screen py-12 bg-gray-100 sm:px-6 lg:px-8"
+>
+  <div class="sm:mx-auto sm:w-full sm:max-w-md">
+    <h1 class="text-4xl font-extrabold text-center text-indigo-600">Panel de Control ADMIN</h1>
+  </div>
+
+  <div class="mt-8 sm:mx-auto sm:w-full md:max-w-4xl">
+    <div class="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        {{#each users}}
+          <div
+            class="flex flex-col items-center p-4 bg-white rounded-lg shadow-lg dark:bg-gray-800"
+          >
+            <h4
+              class="mb-4 font-semibold text-gray-600 dark:text-gray-300"
+            >Name: {{name}}</h4>
+            <p class="text-gray-600 dark:text-gray-400">Role: {{role}}</p>
+            <p class="text-gray-600 dark:text-gray-400">Email: {{email}}</p>
+            <button
+              class="px-2 py-1 mt-4 text-white bg-indigo-600 rounded-lg hover:bg-indigo-800 changeCredentialsButton"
+              data-user-id="{{id}}"
+            >Modificar Rol</button>
+            <button
+              class="px-2 py-1 mt-4 text-white bg-indigo-600 rounded-lg hover:bg-indigo-800 deleteUserButton"
+              data-user-id="{{id}}"
+            >Borrar Usuario</button>
+          </div>
+        {{/each}}
+      </div>
+      {{#if users}}
+        <div class="flex flex-row justify-center">
+          <button
+            class="px-2 py-1 mt-4 text-white bg-red-600 rounded-lg hover:bg-red-800" id="deleteOldUsersButton"
+          >Borrar Usuarios Antiguos</button>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</div>
+
+<script>
+  window.SERVER_URL = "https://back-endproject-production.up.railway.app";
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="module" src="/js/changeCredentials.js"></script>
+<script type="module" src="/js/deleteUser.js"></script>
+<script type="module" src="/js/deleteOldUsers.js"></script>

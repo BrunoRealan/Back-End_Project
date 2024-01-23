@@ -29,11 +29,14 @@ export default class UserManager {
   getAllUsers = async () => {
     try {
       const users = await userRepository.getAll();
+      console.log("users:", users);
       const usersDTO = users.map((user) => ({
-        name: user.first_name,
-        user: user.email,
+        id: user._id.toString(),
+        name: `${user.first_name} ${user.last_name}`,
+        email: user.email,
         role: user.role,
       }));
+      console.log("usersDTO:", usersDTO);
       return usersDTO;
     } catch (error) {
       logger.error(error);
@@ -132,6 +135,10 @@ export default class UserManager {
 
   sendMailToDeleteUsers = async (usersToDelete) => {
     try {
+      if (usersToDelete.length === 0) {
+        logger.info("No hay usuarios para eliminar");
+        return;
+      }
       const sendUsersMail = async (user) => {
         const message = {
           from: process.env.MAIL_USER,
@@ -152,11 +159,20 @@ export default class UserManager {
     }
   };
 
+  deleteOne = async (id) => {
+    try {
+      const deleteResult = await userRepository.deleteOne(id);
+      logger.info("El usuario fue eliminado");
+      return deleteResult;
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
   deleteUsers = async (usersToDelete) => {
     try {
       const idsToDelete = usersToDelete.map((user) => user._id);
       const deleteResult = await userRepository.deleteMany(idsToDelete);
-      logger.info("Los usuarios fueron eliminados");
       return deleteResult;
     } catch (error) {
       logger.error(error);

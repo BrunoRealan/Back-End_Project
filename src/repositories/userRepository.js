@@ -55,6 +55,15 @@ export class UserRepository {
     }
   };
 
+  deleteOne = async (id) => {
+    try {
+      const user = await userModel.findByIdAndDelete(id);
+      return user;
+    } catch (error) {
+      logger.error(error);
+    }
+  };
+
   deleteMany = async (arrayIds) => {
     try {
       const usersToDelete = arrayIds.map(async (id) => {

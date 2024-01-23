@@ -159,3 +159,17 @@ export const profile = async (req, res) => {
     res.status(505).send();
   }
 };
+
+export const admin = async (req, res) => {
+  try {
+    if (req.session.role !== "admin") {
+      logger.warning("No tienes permisos para acceder a la sección admin");
+      return res.redirect("/login");
+    }
+    const users = await userManager.getAllUsers();
+    res.status(200).render("admin", { users });
+  } catch (error) {
+    logger.error(error);
+    res.status(505).send();
+  }
+};
