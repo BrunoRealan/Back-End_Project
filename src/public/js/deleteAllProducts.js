@@ -3,8 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (deleteAllButton) {
     deleteAllButton.addEventListener("click", () => {
       const cartId = deleteAllButton.dataset.cartId;
-      console.log(cartId);
-
       Swal.fire({
         title: "Borrar productos del carrito",
         text: "Esta seguro que desea borrar todos los productos del carrito?",
