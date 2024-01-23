@@ -52,6 +52,10 @@ export const getCartById = async (req, res) => {
     const { first_name, last_name, email, age } = req.session;
     const cartId = req.params.cId.trim(); //trim() Elimina espacios en blanco al principio y al final de params
     const cartDocument = await cartManager.getCartById(cartId);
+    let amount = 0;
+    cartDocument.products.forEach((e) => {
+      amount += e.product.price * e.quantity;
+    }); 
     const response = cartDocument.toObject(); //toObject() Retorna objeto palano para handlebars
     res.status(200).render("cart", {
       response,
@@ -60,6 +64,7 @@ export const getCartById = async (req, res) => {
       email,
       age,
       cartId,
+      amount,
     });
   } catch (error) {
     logger.error(error);
