@@ -1,5 +1,3 @@
-import Swal from "sweetalert2";
-
 document.addEventListener("DOMContentLoaded", () => {
   const purchaseButton = document.getElementById("purchaseButton");
   if (purchaseButton) {
