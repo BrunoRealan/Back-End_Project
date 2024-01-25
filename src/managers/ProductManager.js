@@ -1,7 +1,6 @@
 import { ProductRepository } from "../repositories/productRepository.js";
 import transporter from "../services/mailTransporter.js";
 import logger from "../services/logger.js";
-import dotenv from "dotenv";
 
 const productRepository = new ProductRepository();
 export default class ProductManager {
@@ -16,6 +15,10 @@ export default class ProductManager {
       const modelQuery = query ? JSON.parse(query) : {};
       const modelSort = sortObjectMapper[sort] ?? undefined;
       const modelPage = page ? parseInt(page, 10) : 1;
+
+      if (category) {
+        modelQuery.category = category;
+      }
 
       const products = await productRepository.get(
         modelLimit,

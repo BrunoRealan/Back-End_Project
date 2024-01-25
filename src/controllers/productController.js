@@ -143,6 +143,7 @@ export const deleteProduct = async (req, res) => {
     }
     if (req.session.role === "premium") {
       if (productFound.owner === req.session.email) {
+        //Si el producto es de un usuario premium, se le envia un mail
         await productManager.sendMailDeleteProduct(req.session.email);
         await productManager.deleteProduct(productId);
         const products = await productManager.getProducts();
@@ -159,6 +160,7 @@ export const deleteProduct = async (req, res) => {
       }
     } else {
       const product = await productManager.getProductById(productId);
+      //Si el admin borra un producto de un usuario premium, se le envia un mail
       await productManager.sendMailDeleteProduct(product.owner);
       await productManager.deleteProduct(productId);
       const products = await productManager.getProducts();
