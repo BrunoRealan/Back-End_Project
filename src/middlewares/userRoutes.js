@@ -8,9 +8,11 @@ const userRoutes = (req, res, next) => {
     logger.warning("No tienes las credenciales necesarias de usuario.");
     return res
       .status(401)
-      .send(
-        "No tienes las credenciales necesarias para realizar la solicitud."
-      );
+      .send({
+        status: "failure",
+        message:
+          "You do not have the necessary credentials to make the request",
+      });
   }
   next();
 };

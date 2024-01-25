@@ -18,6 +18,7 @@ import publicRoutes from "../middlewares/publicRoutes.js";
 import privateRoutes from "../middlewares/privateRoutes.js";
 import userRoutes from "../middlewares/userRoutes.js";
 import logger from "../services/logger.js";
+import adminRoutes from "../middlewares/adminRoutes.js";
 
 const router = Router();
 
@@ -42,7 +43,7 @@ router.get("/sendResetPassword", sendResetPassword);
 router.get("/resetPassword/:rId", resetPassword);
 router.get("/failregister", failregister);
 router.get("/profile", privateRoutes, profile);
-router.get("/admin", admin);
+router.get("/admin", adminRoutes, admin);
 
 
 export default router;

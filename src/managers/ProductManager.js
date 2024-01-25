@@ -16,10 +16,6 @@ export default class ProductManager {
       const modelSort = sortObjectMapper[sort] ?? undefined;
       const modelPage = page ? parseInt(page, 10) : 1;
 
-      if (category) {
-        modelQuery.category = category;
-      }
-
       const products = await productRepository.get(
         modelLimit,
         modelQuery,

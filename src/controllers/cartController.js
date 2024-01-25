@@ -1,3 +1,4 @@
+import Swal from "sweetalert2";
 import CartManger from "../managers/CartManager.js";
 import ProductManager from "../managers/ProductManager.js";
 import logger from "../services/logger.js";
@@ -88,7 +89,11 @@ export const addToCart = async (req, res) => {
     }
     if (req.session.role === "premium") {
       product.owner === req.session.email
-        ? alert("No puedes agregar tu propio producto a tu carrito")
+        ? Swal({
+            title: "No puedes agregar tu propio producto al carrito",
+            icon: "warning",
+            confirmButtonText: "Ok",
+          })
         : await cartManager.addToCart(cartId, productId);
       return res.status(200).send({ status: "success" });
     }
@@ -123,15 +128,11 @@ export const modifyQuantityInCart = async (req, res) => {
   }
 };
 
-//revisar
 export const deleteProductInCart = async (req, res) => {
   try {
     const cartId = req.params.cId.trim();
     const productId = req.params.pId.trim();
-    await cartManager.deleteProductInCart(
-      cartId,
-      productId
-    );
+    await cartManager.deleteProductInCart(cartId, productId);
     res.status(200).send({
       status: "The product in cart was eliminated",
     });
