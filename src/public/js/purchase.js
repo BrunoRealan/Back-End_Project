@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
         cancelButtonText: "No",
       }).then((result) => {
         if (result.isConfirmed) {
-          fetch(`http://localhost:8080/api/carts/${cartId}/purchase`, {
+          fetch(`${window.SERVER_URL}/api/carts/${cartId}/purchase`, {
             method: "POST",
           })
             .then((response) => {
