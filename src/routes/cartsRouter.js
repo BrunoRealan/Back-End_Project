@@ -20,6 +20,6 @@ router.delete("/:cId", deleteAllProductsInCart);
 router.post("/:cId/products/:pId", userRoutes, addToCart);
 router.put("/:cId/products/:pId", modifyQuantityInCart);
 router.delete("/:cId/products/:pId", deleteProductInCart);
-router.post("/:cId/purchase", /* userRoutes, */ purchase);
+router.post("/:cId/purchase", userRoutes, purchase);
 
 export default router;
