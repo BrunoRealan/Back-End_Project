@@ -4,6 +4,7 @@ import { TicketReposiotory } from "../repositories/ticketRepository.js";
 import crypto from "crypto";
 import mongoose from "mongoose";
 import logger from "../services/logger.js";
+import Swal from "sweetalert2";
 
 const cartRepository = new CartRepository();
 const productRepository = new ProductRepository();
@@ -165,7 +166,6 @@ export default class CartManger {
           product.stock -= item.quantity;
           await product.save();
           productsPurchased.push(item);
-
           // Calcular el total solo para los productos comprados
           const productTotal = item.product.price * item.quantity;
           amount += productTotal;
@@ -174,18 +174,19 @@ export default class CartManger {
           productsNotPurchased.push(item);
         }
       }
-
       // Guardar el carrito actualizado
       cart.products = productsNotPurchased;
       await cart.save();
-
-      function generateUniqueCode() {
-        return crypto.randomBytes(12).toString("hex");
-      }
-      const code = generateUniqueCode();
       // Crear el ticket solo con los productos comprados
-      const newTicket = await ticketRepository.create(code, amount, purchaser);
-      logger.info(newTicket, "newTicket");
+      const newTicket = await ticketRepository.create(amount, purchaser);
+      Swal.fire({
+        title: "Compra realizada correctamente",
+        text: `El ticket de compra ${newTicket._id.toString()} ha sido creado, te contactaremos para el envio del producto.`,
+        icon: "success",
+        showConfirmButton: false,
+        timer: 3000,
+      });
+      logger.info(newTicket);
 
       return { newTicket, productsNotPurchased };
     } catch (error) {

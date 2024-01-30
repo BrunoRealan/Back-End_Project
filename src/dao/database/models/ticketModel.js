@@ -3,11 +3,6 @@ import mongoose from "mongoose";
 const ticketCollection = "tickets";
 
 const ticketSchema = new mongoose.Schema({
-  code: {
-    type: String,
-    required: true,
-    unique: true,
-  },
   purchaseDateTime: {
     type: Date,
     default: Date.now,
