@@ -19,17 +19,16 @@ document.addEventListener("DOMContentLoaded", () => {
               if (!response.ok) {
                 throw new Error("No se pudo crear el ticket de compra");
               }
-              console.log(response);
               Swal.fire({
                 title: "Compra realizada correctamente",
-                text: `El ticket de compra ${response}ha sido creado, te contactaremos para el envio del producto.`,
+                text: "El ticket de compra ha sido creado, te contactaremos para el envio del producto.",
                 icon: "success",
                 showConfirmButton: false,
-                /* timer: 3000, */
+                timer: 3000,
               });
-/*               setTimeout(() => {
+              setTimeout(() => {
                 window.location.href = "/products";
-              }, 3000); */
+              }, 3000);
             })
             .catch((error) => {
               console.error("Error al crear ticket de compra:", error);

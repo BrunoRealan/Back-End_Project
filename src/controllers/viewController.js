@@ -56,7 +56,7 @@ export const getCartById = async (req, res) => {
     cartDocument.products.forEach((e) => {
       amount += e.product.price * e.quantity;
     }); 
-    const response = cartDocument.toObject(); //toObject() Retorna objeto palano para handlebars
+    const response = cartDocument.toObject(); //toObject() Retorna objeto plano para handlebars
     res.status(200).render("cart", {
       response,
       first_name,

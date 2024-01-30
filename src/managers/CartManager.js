@@ -181,7 +181,7 @@ export default class CartManger {
 
       // Crear el ticket solo con los productos comprados
       const newTicket = await ticketRepository.create(amount, purchaser);
-      logger.info(newTicket, "newTicket");
+      logger.info(newTicket);
 
       return { newTicket, productsNotPurchased };
     } catch (error) {
